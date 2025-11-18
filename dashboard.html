@@ -202,7 +202,6 @@
       width: 100%;
       height: clamp(200px, 40vw, 300px);
       position: relative;
-      /* overflow: hidden; // Removido para melhorar o layout */
     }
 
     .chart-bar {
@@ -232,8 +231,6 @@
 
     .chart-bar-fill {
       height: 100%;
-      /* Usando var para a cor de fundo dinamicamente no JS */
-      /* background: linear-gradient(90deg, var(--primary-color), var(--info-color)); */
       border-radius: 20px;
       transition: width 1s ease-in-out;
       display: flex;
@@ -432,7 +429,7 @@
     }
 
     /* ========================
-       ASSISTENTE AG - 3D OTIMIZADO
+       ASSISTENTE AG - SIMPLIFICADO
     ======================== */
     .assistente-ag {
       position: fixed;
@@ -441,124 +438,57 @@
       z-index: 1000;
       transition: all 0.3s ease;
     }
-    
-    /* Container do Avatar 3D */
+
+    /* Container simples - apenas para posicionamento */
     #agAvatarContainer {
-      width: 120px;
-      height: 120px;
-      perspective: 1000px;
+      width: auto;
+      height: auto;
       cursor: pointer;
-      margin: 0; /* Ajustado */
+      margin: 0;
     }
 
-    /* Avatar 3D */
+    /* Avatar sem efeitos 3D */
     .ag-avatar {
-      width: 100%;
-      height: 100%;
+      width: 120px;
+      height: 120px;
       position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.5s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 50%;
     }
-    
-    /* Efeito 3D no hover */
-    #agAvatarContainer:hover .ag-avatar {
-      transform: rotateY(15deg) rotateX(10deg) scale(1.05);
-    }
-    
-    /* Imagem do Avatar com efeito 3D */
+
+    /* Imagem solta e natural */
     .ag-avatar img {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      border-radius: 50%;
-      
-      /* Efeitos 3D */
-      transform: translateZ(20px);
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
-      
-      /* Borda sutil para destacar */
-      border: 3px solid transparent;
-      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4) border-box;
-      
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
+      transform: none !important;
+      filter: none !important;
+      border: none !important;
+      background: none !important;
+      border-radius: 0 !important;
+      transition: transform 0.3s ease;
     }
 
-    /* Animação de dança 3D */
+    /* Efeito sutil no hover */
+    #agAvatarContainer:hover .ag-avatar img {
+      transform: scale(1.05);
+    }
+
+    /* Remove todas as animações e efeitos anteriores */
     .ag-dance {
-      animation: dance3D 4s ease-in-out infinite;
+      animation: none !important;
     }
 
-    @keyframes dance3D {
-      0%, 100% {
-        transform: translateY(0px) rotateY(0deg) scale(1);
-      }
-      25% {
-        transform: translateY(-10px) rotateY(10deg) scale(1.02);
-      }
-      50% {
-        transform: translateY(-5px) rotateY(0deg) scale(1.05);
-      }
-      75% {
-        transform: translateY(-10px) rotateY(-10deg) scale(1.02);
-      }
-    }
-
-    /* Efeito de flutuação mais suave */
-    .ag-avatar::before {
-      content: '';
-      position: absolute;
-      top: -5px;
-      left: -5px;
-      right: -5px;
-      bottom: -5px;
-      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
-      border-radius: 50%;
-      z-index: -1;
-      opacity: 0.7;
-      filter: blur(15px);
-      animation: glow3D 3s ease-in-out infinite;
-    }
-
-    @keyframes glow3D {
-      0%, 100% {
-        opacity: 0.5;
-        transform: scale(1);
-      }
-      50% {
-        opacity: 0.8;
-        transform: scale(1.1);
-      }
-    }
-
-    /* Efeito de reflexo 3D */
+    .ag-avatar::before,
     .ag-avatar::after {
-      content: '';
-      position: absolute;
-      bottom: -20px;
-      left: 10%;
-      width: 80%;
-      height: 20px;
-      background: radial-gradient(ellipse at center, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
-      border-radius: 50%;
-      transform: rotateX(90deg) translateZ(-10px);
-      opacity: 0.6;
-      filter: blur(5px);
+      display: none !important;
     }
 
-    /* Efeito de clique */
-    .ag-avatar:active {
-      transform: scale(0.95) translateZ(10px);
-      transition: transform 0.1s ease;
-    }
-
+    /* Chat mantém o mesmo estilo */
     .ag-chat {
       position: absolute;
-      bottom: 85px;
+      bottom: 140px;
       right: 0;
       width: 350px;
       max-width: 90vw;
@@ -634,38 +564,6 @@
       border-bottom-right-radius: 4px;
     }
 
-    .ag-chat-input {
-      display: flex;
-      padding: 1rem;
-      border-top: 1px solid #ddd;
-      background: var(--card-bg);
-    }
-
-    .ag-chat-input input {
-      flex: 1;
-      padding: 0.75rem;
-      border: 1px solid #ddd;
-      border-radius: 20px;
-      outline: none;
-      font-size: 0.9rem;
-      background: var(--card-bg);
-      color: var(--text-color);
-    }
-
-    .ag-chat-input button {
-      background: var(--primary-color);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      margin-left: 0.5rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
     /* Botões de ação rápida no AG */
     .ag-actions {
       display: grid;
@@ -694,17 +592,8 @@
       transform: translateX(5px);
     }
 
-    .ag-action-btn i {
-      font-size: 1.1rem;
-    }
-
     .ag-thinking {
-      animation: thinking 1.5s infinite ease-in-out;
-    }
-
-    @keyframes thinking {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(0.95); }
+      opacity: 0.7;
     }
 
     /* ========================
@@ -719,239 +608,7 @@
       pointer-events: none;
       z-index: 999;
     }
-/* ========================
-   ASSISTENTE AG - IMAGEM SOLTA MAIOR
-======================= */
-.assistente-ag {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 1000;
-  transition: all 0.3s ease;
-}
 
-/* Container simples - apenas para posicionamento */
-#agAvatarContainer {
-  width: auto;
-  height: auto;
-  cursor: pointer;
-  margin: 0;
-}
-
-/* Avatar maior */
-.ag-avatar {
-  width: 180px; /* Aumentado de 120px */
-  height: 180px; /* Aumentado de 120px */
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Imagem solta e natural - maior */
-.ag-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  
-  /* Remove todos os efeitos anteriores */
-  transform: none !important;
-  filter: none !important;
-  border: none !important;
-  background: none !important;
-  border-radius: 0 !important;
-  
-  /* Efeito sutil no hover */
-  transition: transform 0.3s ease;
-}
-
-/* Efeito sutil no hover */
-#agAvatarContainer:hover .ag-avatar img {
-  transform: scale(1.05);
-}
-
-/* Remove todas as animações e efeitos anteriores */
-.ag-dance {
-  /* Remove a animação de dança */
-  animation: none !important;
-}
-
-.ag-avatar::before,
-.ag-avatar::after {
-  /* Remove os efeitos de glow e reflexo */
-  display: none !important;
-}
-
-/* Ajusta a posição do chat para ficar acima da imagem maior */
-.ag-chat {
-  position: absolute;
-  bottom: 200px; /* Aumentado de 140px para acomodar imagem maior */
-  right: 0;
-  width: 350px;
-  max-width: 90vw;
-  background: var(--card-bg);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  display: none;
-  flex-direction: column;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.ag-chat.active {
-  display: flex;
-  animation: fadeIn 0.3s ease;
-}
-
-/* Restante do chat mantém o mesmo estilo */
-.ag-chat-header {
-  background: var(--primary-color);
-  color: white;
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.ag-chat-title {
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.ag-chat-close {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 1.2rem;
-}
-
-.ag-chat-messages {
-  padding: 1rem;
-  max-height: 300px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.ag-message {
-  padding: 0.75rem 1rem;
-  border-radius: 18px;
-  max-width: 85%;
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
-
-.ag-message.ag {
-  background: var(--primary-color);
-  color: white;
-  align-self: flex-start;
-  border-bottom-left-radius: 4px;
-}
-
-.ag-message.user {
-  background: var(--card-bg);
-  border: 1px solid #ddd;
-  align-self: flex-end;
-  border-bottom-right-radius: 4px;
-}
-
-.ag-chat-input {
-  display: flex;
-  padding: 1rem;
-  border-top: 1px solid #ddd;
-  background: var(--card-bg);
-}
-
-.ag-chat-input input {
-  flex: 1;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  outline: none;
-  font-size: 0.9rem;
-  background: var(--card-bg);
-  color: var(--text-color);
-}
-
-.ag-chat-input button {
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  margin-left: 0.5rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Botões de ação rápida no AG */
-.ag-actions {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.5rem;
-  padding: 0 1rem 1rem;
-}
-
-.ag-action-btn {
-  background: var(--card-bg);
-  border: 1px solid #ddd;
-  border-radius: var(--border-radius);
-  padding: 0.75rem 1rem;
-  cursor: pointer;
-  font-size: 0.9rem;
-  text-align: left;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.ag-action-btn:hover {
-  background: var(--primary-color);
-  color: white;
-  transform: translateX(5px);
-}
-
-.ag-action-btn i {
-  font-size: 1.1rem;
-}
-
-.ag-thinking {
-  opacity: 0.7;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-  .ag-avatar {
-    width: 150px; /* Um pouco menor em tablets */
-    height: 150px;
-  }
-  
-  .ag-chat {
-    bottom: 170px; /* Ajustado para tablets */
-  }
-}
-
-@media (max-width: 480px) {
-  .assistente-ag {
-    bottom: 10px;
-    right: 10px;
-  }
-  
-  .ag-avatar {
-    width: 120px; /* Mantém um bom tamanho em mobile */
-    height: 120px;
-  }
-  
-  .ag-chat {
-    bottom: 140px; /* Ajustado para mobile */
-  }
-}
     .snowflake {
       position: absolute;
       top: -10px;
@@ -971,7 +628,6 @@
     .frozen {
       position: relative;
       overflow: hidden;
-      /* Indicativo visual de que está congelado */
       border: 2px solid #b3e0ff !important; 
     }
 
@@ -1002,7 +658,6 @@
       position: absolute;
       width: 100%;
       height: 100%;
-      /* Corrigido para melhor visibilidade em temas claros/escuros */
       background: 
         radial-gradient(circle at 30% 30%, transparent 10px, rgba(255,255,255,0.9) 11px, transparent 12px),
         radial-gradient(circle at 70% 70%, transparent 8px, rgba(255,255,255,0.9) 9px, transparent 10px),
@@ -1046,7 +701,7 @@
       .stat-card { padding: 1rem; min-height: 100px; }
       .quick-actions { grid-template-columns: 1fr; }
       .chart-label { min-width: 80px; font-size: 0.8rem; }
-      #agAvatarContainer { width: 80px; height: 80px; } /* Ajuste de tamanho */
+      #agAvatarContainer { width: 80px; height: 80px; }
       .ag-chat { width: 280px; }
     }
 
@@ -1055,229 +710,10 @@
       .chart-bar { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
       .chart-bar-container { width: 100%; }
       .assistente-ag { bottom: 10px; right: 10px; }
+      .ag-avatar { width: 80px; height: 80px; }
+      .ag-chat { bottom: 100px; }
     }
-/* ========================
-   ASSISTENTE AG - IMAGEM SOLTA SEM EFEITOS
-======================= */
-.assistente-ag {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 1000;
-  transition: all 0.3s ease;
-}
 
-/* Container simples - apenas para posicionamento */
-#agAvatarContainer {
-  width: auto;
-  height: auto;
-  cursor: pointer;
-  margin: 0;
-}
-
-/* Avatar sem efeitos 3D */
-.ag-avatar {
-  width: 120px;
-  height: 120px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Imagem solta e natural */
-.ag-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  
-  /* Remove todos os efeitos anteriores */
-  transform: none !important;
-  filter: none !important;
-  border: none !important;
-  background: none !important;
-  border-radius: 0 !important;
-  
-  /* Efeito sutil no hover */
-  transition: transform 0.3s ease;
-}
-
-/* Efeito sutil no hover */
-#agAvatarContainer:hover .ag-avatar img {
-  transform: scale(1.05);
-}
-
-/* Remove todas as animações e efeitos anteriores */
-.ag-dance {
-  /* Remove a animação de dança */
-  animation: none !important;
-}
-
-.ag-avatar::before,
-.ag-avatar::after {
-  /* Remove os efeitos de glow e reflexo */
-  display: none !important;
-}
-
-/* Chat mantém o mesmo estilo */
-.ag-chat {
-  position: absolute;
-  bottom: 140px; /* Ajustado para ficar acima da imagem */
-  right: 0;
-  width: 350px;
-  max-width: 90vw;
-  background: var(--card-bg);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  display: none;
-  flex-direction: column;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.ag-chat.active {
-  display: flex;
-  animation: fadeIn 0.3s ease;
-}
-
-/* Restante do chat mantém o mesmo estilo */
-.ag-chat-header {
-  background: var(--primary-color);
-  color: white;
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.ag-chat-title {
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.ag-chat-close {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 1.2rem;
-}
-
-.ag-chat-messages {
-  padding: 1rem;
-  max-height: 300px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.ag-message {
-  padding: 0.75rem 1rem;
-  border-radius: 18px;
-  max-width: 85%;
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
-
-.ag-message.ag {
-  background: var(--primary-color);
-  color: white;
-  align-self: flex-start;
-  border-bottom-left-radius: 4px;
-}
-
-.ag-message.user {
-  background: var(--card-bg);
-  border: 1px solid #ddd;
-  align-self: flex-end;
-  border-bottom-right-radius: 4px;
-}
-
-.ag-chat-input {
-  display: flex;
-  padding: 1rem;
-  border-top: 1px solid #ddd;
-  background: var(--card-bg);
-}
-
-.ag-chat-input input {
-  flex: 1;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  outline: none;
-  font-size: 0.9rem;
-  background: var(--card-bg);
-  color: var(--text-color);
-}
-
-.ag-chat-input button {
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  margin-left: 0.5rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Botões de ação rápida no AG */
-.ag-actions {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.5rem;
-  padding: 0 1rem 1rem;
-}
-
-.ag-action-btn {
-  background: var(--card-bg);
-  border: 1px solid #ddd;
-  border-radius: var(--border-radius);
-  padding: 0.75rem 1rem;
-  cursor: pointer;
-  font-size: 0.9rem;
-  text-align: left;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.ag-action-btn:hover {
-  background: var(--primary-color);
-  color: white;
-  transform: translateX(5px);
-}
-
-.ag-action-btn i {
-  font-size: 1.1rem;
-}
-
-.ag-thinking {
-  opacity: 0.7;
-}
-
-/* Responsividade */
-@media (max-width: 480px) {
-  .assistente-ag {
-    bottom: 10px;
-    right: 10px;
-  }
-  
-  .ag-avatar {
-    width: 80px;
-    height: 80px;
-  }
-  
-  .ag-chat {
-    bottom: 100px; /* Ajustado para mobile */
-  }
-}
     /* Tablet (768px a 1024px) */
     @media (min-width: 768px) and (max-width: 1024px) {
       .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1317,7 +753,7 @@
     .stat-card:focus-visible,
     .action-btn:focus-visible,
     .ag-action-btn:focus-visible,
-    #agAvatarContainer:focus-visible { /* Adicionado foco para o avatar */
+    #agAvatarContainer:focus-visible {
       outline: 3px solid var(--primary-color);
       outline-offset: 2px;
     }
@@ -1405,26 +841,27 @@
     
     <div class="ag-actions">
       <button class="ag-action-btn" data-action="tutorial">
-        <i></i> Tutorial Completo
+        📚 Tutorial Completo
       </button>
       <button class="ag-action-btn" data-action="agendamento">
-        <i></i> Criar Agendamento
+        📅 Criar Agendamento
       </button>
       <button class="ag-action-btn" data-action="servico">
-        <i></i> Cadastrar Serviços
+        🛠️ Cadastrar Serviços
       </button>
       <button class="ag-action-btn" data-action="cliente">
-        <i></i> Gerenciar Clientes
+        👥 Gerenciar Clientes
       </button>
-    </div>
-    
-    <div class="ag-chat-input">
-      <input type="text" id="agInput" placeholder="Digite sua pergunta..." aria-label="Digite sua pergunta">
-      <button id="agSend" aria-label="Enviar Mensagem">➤</button>
+      <button class="ag-action-btn" data-action="dashboard">
+        📊 Como usar o Dashboard
+      </button>
+      <button class="ag-action-btn" data-action="suporte">
+        🆘 Suporte Técnico
+      </button>
     </div>
   </div>
   <div class="ag-avatar-container" id="agAvatarContainer" role="button" tabindex="0" aria-label="Abrir Assistente Virtual AG">
-    <div class="ag-avatar ag-dance" id="agAvatar">
+    <div class="ag-avatar" id="agAvatar">
       <img src="Gemini_Generated_Image_fbi50nfbi50nfbi5-removebg-preview.png" alt="Assistente Virtual AG, um boneco azul amigável.">
     </div>
   </div>
@@ -1475,7 +912,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const [ano, mes, dia] = data.split('-');
       return `${dia}/${mes}/${ano}`;
     } catch {
-      return data; // Retorna a data original se houver erro de split
+      return data;
     }
   }
 
@@ -1618,35 +1055,37 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =====================
-  // ASSISTENTE AG (REFACTOR)
+  // ASSISTENTE AG SIMPLIFICADO (SEM INPUT)
   // =====================
-  
+
   const FAQ_RESPONSES = {
-    'tutorial': 'Vou te dar um tutorial rápido: 1) No menu Agendamentos, clique em "Novo Agendamento"; 2) Selecione o cliente e serviço; 3) Escolha data e hora; 4) Confirme. Pronto!',
-    'serviço': 'Para cadastrar um serviço: 1) Vá em "Serviços"; 2) Clique em "Novo Serviço"; 3) Preencha nome, descrição e preço; 4) Salve.',
-    'cliente': 'Para cadastrar um cliente: 1) Vá em "Clientes"; 2) Clique em "Novo Cliente"; 3) Preencha nome, telefone e email; 4) Salve.',
-    'agendamento': 'Para criar um agendamento: 1) Vá em "Agendamentos"; 2) Clique em "Novo Agendamento"; 3) Selecione cliente, serviço, data e hora; 4) Confirme.',
-    'dashboard': 'O Dashboard mostra uma visão geral: estatísticas de agendamentos, gráficos de status e agendamentos recentes. É sua tela principal!',
-    'ajuda': 'Posso ajudar com: criar agendamentos, gerenciar serviços, visualizar clientes ou explicar funcionalidades. O que você precisa?',
-    'suporte': 'Para suporte técnico, entre em contato pelo WhatsApp: (61) 98582-5956 ou Instagram: @pauloryantomaz'
+    'tutorial': '📚 **Tutorial Completo:**\n\n1) **Agendamentos**: Clique em "Novo Agendamento", selecione cliente, serviço, data e hora\n2) **Serviços**: Vá em "Serviços" para cadastrar novos serviços\n3) **Clientes**: Em "Clientes" você gerencia todos os clientes\n4) **Dashboard**: Aqui você vê estatísticas e agendamentos recentes\n\nPrecisa de ajuda com algo específico?',
+    
+    'agendamento': '📅 **Criar Agendamento:**\n\n1) Clique em "Novo Agendamento" no menu ou no Dashboard\n2) Selecione o cliente na lista\n3) Escolha o serviço desejado\n4) Defina data e horário\n5) Confirme o agendamento\n\n💡 **Dica**: Você pode visualizar todos os agendamentos na página específica!',
+    
+    'servico': '🛠️ **Cadastrar Serviços:**\n\n1) Vá para a página "Serviços"\n2) Clique em "Adicionar Serviço"\n3) Preencha: Nome, Descrição e Valor\n4) Adicione uma foto (opcional)\n5) Salve o serviço\n\n✅ **Pronto!** O serviço já estará disponível para agendamento.',
+    
+    'cliente': '👥 **Gerenciar Clientes:**\n\n1) Acesse a página "Clientes"\n2) Para novo cliente: clique em "Novo Cliente"\n3) Preencha: Nome, Telefone, Email\n4) Salve as informações\n\n📞 **Importante**: Mantenha os dados atualizados para melhor atendimento!',
+    
+    'dashboard': '📊 **Como usar o Dashboard:**\n\n• **Cartões Estatísticos**: Veja agendamentos do dia, mês, serviços disponíveis e clientes\n• **Gráfico de Status**: Visualize a distribuição dos agendamentos por status\n• **Agendamentos Recentes**: Lista dos últimos 5 agendamentos\n• **Ações Rápidas**: Acesso rápido às principais funcionalidades\n\n🎯 **Tudo em um só lugar para você acompanhar!**',
+    
+    'suporte': '🆘 **Suporte Técnico:**\n\n📱 **WhatsApp**: (61) 98582-5956\n📸 **Instagram**: @pauloryantomaz\n✉️ **Email**: contato@agendamentomais.com\n\n🕒 **Horário de atendimento**:\nSegunda a Sexta: 8h às 18h\nSábado: 8h às 12h\n\n💬 Estamos aqui para ajudar!',
+    
+    'ajuda': '🤝 **Como posso ajudar?**\n\nClique em qualquer um dos botões abaixo para:\n• 📚 Ver tutorial completo\n• 📅 Criar um agendamento\n• 🛠️ Cadastrar serviços\n• 👥 Gerenciar clientes\n• 📊 Entender o Dashboard\n• 🆘 Falar com suporte\n\nO que você gostaria de saber?'
   };
 
   const agAvatarContainer = document.getElementById('agAvatarContainer');
   const agAvatar = document.getElementById('agAvatar');
   const agChat = document.getElementById('agChat');
   const agMessages = document.getElementById('agMessages');
-  const agInput = document.getElementById('agInput');
-  const agSend = document.getElementById('agSend');
   const agClose = document.getElementById('agClose');
   const agActionButtons = document.querySelectorAll('.ag-action-btn');
-  
+
   let isChatOpen = false;
   let hasInteracted = false;
 
   /**
    * Adiciona uma mensagem ao chat.
-   * @param {string} message - O conteúdo da mensagem.
-   * @param {boolean} isUser - true se a mensagem for do usuário, false se for do AG.
    */
   function agSendMessage(message, isUser = false) {
     const messageDiv = document.createElement('div');
@@ -1657,25 +1096,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
-   * Processa a pergunta do usuário e retorna a resposta.
-   * @param {string} question - A pergunta do usuário.
-   * @returns {string} A resposta do assistente.
-   */
-  function processUserQuestion(question) {
-    const cleanQuestion = question.toLowerCase().trim();
-    
-    for (const [keyword, response] of Object.entries(FAQ_RESPONSES)) {
-      if (cleanQuestion.includes(keyword) || cleanQuestion.includes(keyword.replace('ç', 'c'))) {
-        return response;
-      }
-    }
-    
-    return "Desculpe, não entendi sua pergunta. Tente usar palavras-chave como 'agendamento', 'serviço' ou 'tutorial'.";
-  }
-
-  /**
    * Simula o efeito de digitação do AG.
-   * @param {string} message - A mensagem a ser digitada.
    */
   function agTypeMessage(message, delay = 30) {
     return new Promise(resolve => {
@@ -1699,30 +1120,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
-   * Trata a submissão de mensagens.
+   * Processa a ação selecionada e mostra a resposta.
    */
-  async function sendMessage() {
-    const question = agInput.value.trim();
-    if (question === '') return;
-    
-    agSendMessage(question, true);
-    agInput.value = '';
-    
-    // Simula processamento
-    agAvatar.classList.remove('ag-dance');
-    agAvatar.classList.add('ag-thinking');
-    
-    await new Promise(r => setTimeout(r, 800)); // Pequena pausa
-    
-    const response = processUserQuestion(question);
+  async function processAction(action) {
+    const response = FAQ_RESPONSES[action] || FAQ_RESPONSES['ajuda'];
     await agTypeMessage(response);
-    
-    agAvatar.classList.remove('ag-thinking');
-    if (isChatOpen) {
-       agInput.focus();
-    } else {
-       agAvatar.classList.add('ag-dance');
-    }
     hasInteracted = true;
   }
 
@@ -1732,63 +1134,34 @@ document.addEventListener('DOMContentLoaded', () => {
   function toggleChat() {
     isChatOpen = !isChatOpen;
     agChat.classList.toggle('active', isChatOpen);
-    agAvatar.classList.toggle('active', isChatOpen);
     agChat.setAttribute('aria-modal', isChatOpen);
 
     if (isChatOpen) {
-      agAvatar.classList.remove('ag-dance');
-      agAvatar.classList.add('ag-thinking');
-      agInput.focus();
-
-      // Injeta mensagem de boas-vindas na abertura
+      // Mensagem de boas-vindas na primeira abertura
       if (!hasInteracted) {
-         agTypeMessage("Olá! Eu sou o AG, seu assistente virtual. Como posso ajudar você hoje?");
+        agTypeMessage("👋 Olá! Eu sou o AG, seu assistente virtual. Escolha uma das opções abaixo para começar:");
       }
-    } else {
-      agAvatar.classList.remove('ag-thinking');
-      agAvatar.classList.add('ag-dance');
     }
   }
 
   // Event Listeners do AG
   agAvatarContainer.addEventListener('click', toggleChat);
-  agAvatarContainer.addEventListener('keypress', (e) => { // Acessibilidade com teclado
+  agAvatarContainer.addEventListener('keypress', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       toggleChat();
     }
   });
-  agClose.addEventListener('click', toggleChat);
-  agSend.addEventListener('click', sendMessage);
-  agInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      sendMessage();
-    }
-  });
 
-  // Ações rápidas
+  agClose.addEventListener('click', toggleChat);
+
+  // Ações rápidas - agora são a única forma de interação
   agActionButtons.forEach(button => {
     button.addEventListener('click', async () => {
       const action = button.getAttribute('data-action');
-      const actionLabel = button.textContent.trim();
-      
-      // Simula o envio da pergunta como se o usuário tivesse digitado
-      agSendMessage(actionLabel, true);
-
-      agAvatar.classList.remove('ag-dance');
-      agAvatar.classList.add('ag-thinking');
-      await new Promise(r => setTimeout(r, 800));
-
-      const response = processUserQuestion(action);
-      await agTypeMessage(response);
-      
-      agAvatar.classList.remove('ag-thinking');
-      agInput.focus();
+      await processAction(action);
     });
   });
-
-  // Inicia a dança do AG
-  agAvatar.classList.add('ag-dance');
 
   // =====================
   // TEMA NATALINO AUTOMÁTICO
@@ -1925,35 +1298,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Atualiza dados a cada 30 segundos
   setInterval(carregarDashboard, 30000);
 });
-// REMOVA ou COMENTE estas linhas do JavaScript:
-
-// Remove a classe de dança quando o chat abre
-// agAvatar.classList.remove('ag-dance');
-
-// Remove a classe de thinking quando o chat fecha  
-// agAvatar.classList.remove('ag-thinking');
-
-// Não adiciona a classe de dança de volta
-// agAvatar.classList.add('ag-dance');
-
-// No toggleChat, simplifique para:
-function toggleChat() {
-    isChatOpen = !isChatOpen;
-    agChat.classList.toggle('active', isChatOpen);
-    
-    if (isChatOpen) {
-        agInput.focus();
-        // Injeta mensagem de boas-vindas na abertura
-        if (!hasInteracted) {
-            agTypeMessage("Olá! Eu sou o AG, seu assistente virtual. Como posso ajudar você hoje?");
-        }
-    }
-}
-
-// Remova também estas linhas do evento de ações rápidas:
-// agAvatar.classList.remove('ag-dance');
-// agAvatar.classList.add('ag-thinking');
-// agAvatar.classList.remove('ag-thinking');
 </script>
 </body>
 </html>
