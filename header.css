@@ -1,0 +1,185 @@
+/* header.css - Estilos específicos para o header reutilizável */
+
+/* ========================
+   HEADER RESPONSIVO
+======================= */
+header {
+    background: var(--card-bg);
+    box-shadow: var(--shadow);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: clamp(1.25rem, 4vw, 1.5rem);
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.logo:hover {
+    color: var(--secondary-color);
+}
+
+.theme-toggle {
+    background: none;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: clamp(0.875rem, 3vw, 1rem);
+    min-width: 80px;
+}
+
+.theme-toggle:hover {
+    background: var(--primary-color);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.nav-links {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.nav-link {
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+    font-size: clamp(0.875rem, 2.5vw, 0.95rem);
+    white-space: nowrap;
+    position: relative;
+}
+
+.nav-link:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.nav-link.active {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 1rem;
+    right: 1rem;
+    height: 2px;
+    background-color: var(--primary-color);
+    border-radius: 2px;
+}
+
+#menuBtn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+    padding: 0.25rem;
+    z-index: 1001;
+    transition: transform 0.3s ease;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+}
+
+#menuBtn:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+
+#menuBtn.active {
+    transform: rotate(90deg);
+}
+
+/* ========================
+   RESPONSIVIDADE MOBILE
+======================= */
+@media (max-width: 768px) {
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: var(--card-bg);
+        box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+        padding: 80px 20px 20px;
+        transition: right 0.3s ease;
+        z-index: 100;
+        overflow-y: auto;
+    }
+    
+    .nav-links.show {
+        right: 0;
+    }
+    
+    #menuBtn {
+        display: block;
+    }
+    
+    .nav-link {
+        padding: 0.75rem 1rem;
+        text-align: center;
+        width: 100%;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+    }
+    
+    .nav-link.active::after {
+        display: none;
+    }
+    
+    .nav-link.active {
+        background-color: var(--primary-color);
+        color: white;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-content {
+        flex-wrap: wrap;
+    }
+    
+    .theme-toggle {
+        min-width: 60px;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Tablet */
+@media (min-width: 481px) and (max-width: 768px) {
+    .nav-links {
+        gap: 0.75rem;
+    }
+    
+    .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+    }
+}

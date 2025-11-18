@@ -1,0 +1,1959 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Agendamento+</title>
+  
+  <meta name="theme-color" content="#007bff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#007bff">
+  <meta name="msapplication-navbutton-color" content="#007bff">
+  
+  <link rel="stylesheet" href="header.css">
+  
+  <style>
+    /* ========================
+       TEMA CLARO/ESCURO - OTIMIZADO
+    ======================== */
+    :root {
+      --bg-color: #f4f4f4;
+      --text-color: #333;
+      --card-bg: #fff;
+      --primary-color: #007bff;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --info-color: #17a2b8;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+    }
+    
+    [data-theme="dark"] {
+      --bg-color: #1e1e1e;
+      --text-color: #f4f4f4;
+      --card-bg: #2a2a2a;
+      --primary-color: #0d6efd;
+      --secondary-color: #5a6268;
+      --success-color: #218838;
+      --warning-color: #e0a800;
+      --danger-color: #c82333;
+      --info-color: #138496;
+      --shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    /* ========================
+       RESET E BASE RESPONSIVA
+    ======================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      transition: var(--transition);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* ========================
+       MAIN CONTENT / SECTIONS
+    ======================== */
+    .main-content {
+      flex: 1;
+      padding: 2rem 0;
+    }
+
+    .section {
+      background: var(--card-bg);
+      padding: clamp(1.5rem, 4vw, 2rem);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      color: var(--text-color);
+      font-weight: 700;
+    }
+
+    /* ========================
+       DASHBOARD GRID E CARDS
+    ======================== */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      padding: clamp(1.25rem, 3vw, 1.5rem);
+      border-radius: var(--border-radius);
+      text-align: center;
+      box-shadow: var(--shadow);
+      border-left: 5px solid;
+      transition: transform 0.3s ease;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-card.primary { border-left-color: var(--primary-color); }
+    .stat-card.success { border-left-color: var(--success-color); }
+    .stat-card.warning { border-left-color: var(--warning-color); }
+    .stat-card.danger { border-left-color: var(--danger-color); }
+    .stat-card.info { border-left-color: var(--info-color); }
+
+    .stat-value {
+      font-size: clamp(1.75rem, 5vw, 2.5rem);
+      font-weight: 700;
+      margin: 0;
+      color: var(--text-color);
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+      color: var(--secondary-color);
+      margin: 0.5rem 0 0 0;
+      line-height: 1.3;
+    }
+
+    /* ========================
+       AÇÕES RÁPIDAS
+    ======================== */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .action-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: clamp(0.875rem, 2.5vw, 1rem);
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 50px;
+    }
+
+    .action-btn:hover {
+      background: var(--secondary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    /* ========================
+       GRÁFICO RESPONSIVO
+    ======================== */
+    .chart-container {
+      background: var(--card-bg);
+      padding: clamp(1.25rem, 3vw, 1.5rem);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-top: 2rem;
+    }
+
+    .chart-title {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      color: var(--text-color);
+      font-weight: 600;
+    }
+
+    .chart {
+      width: 100%;
+      height: clamp(200px, 40vw, 300px);
+      position: relative;
+      /* overflow: hidden; // Removido para melhorar o layout */
+    }
+
+    .chart-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+
+    .chart-label {
+      min-width: 120px;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .chart-bar-container {
+      flex: 1;
+      background: #e9ecef;
+      border-radius: 20px;
+      overflow: hidden;
+      height: 30px;
+    }
+
+    [data-theme="dark"] .chart-bar-container {
+      background: #444;
+    }
+
+    .chart-bar-fill {
+      height: 100%;
+      /* Usando var para a cor de fundo dinamicamente no JS */
+      /* background: linear-gradient(90deg, var(--primary-color), var(--info-color)); */
+      border-radius: 20px;
+      transition: width 1s ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 1rem;
+      color: white;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    /* ========================
+       TABELA RESPONSIVA
+    ======================== */
+    .table-responsive {
+      overflow-x: auto;
+      margin-top: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+
+    .table th,
+    .table td {
+      padding: clamp(0.75rem, 2vw, 1rem);
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+    }
+
+    [data-theme="dark"] .table th,
+    [data-theme="dark"] .table td {
+      border-bottom-color: #444;
+    }
+
+    .table th {
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      white-space: nowrap;
+    }
+
+    .table-striped tbody tr:nth-child(even) {
+      background-color: rgba(0,0,0,0.03);
+    }
+
+    [data-theme="dark"] .table-striped tbody tr:nth-child(even) {
+      background-color: rgba(255,255,255,0.05);
+    }
+
+    .table tbody tr:hover {
+      background-color: rgba(0,123,255,0.08);
+    }
+
+    /* ========================
+       FOOTER RESPONSIVO
+    ======================== */
+    .footer {
+      background: var(--card-bg);
+      padding: 2rem 0 1rem;
+      text-align: center;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      margin-top: auto;
+      width: 100%;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        text-align: left;
+      }
+    }
+
+    .footer-brand {
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-brand {
+        text-align: left;
+      }
+    }
+
+    .footer-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-nav {
+        justify-content: flex-start;
+      }
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-social {
+        justify-content: flex-end;
+      }
+    }
+
+    .footer-nav a,
+    .footer-social a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-weight: 500;
+    }
+
+    .footer-nav a:hover,
+    .footer-social a:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+
+    .footer-copy {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #ddd;
+      color: var(--secondary-color);
+    }
+
+    [data-theme="dark"] .footer-copy {
+      border-top-color: #444;
+    }
+
+    /* ========================
+       PRELOADER OTIMIZADO
+    ======================== */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    #preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .preloader-logo {
+      font-size: clamp(1.5rem, 8vw, 2.5rem);
+      font-weight: 700;
+      color: var(--primary-color);
+      animation: pulse 1.2s infinite ease-in-out;
+      margin-bottom: 1rem;
+    }
+
+    .preloader-text {
+      color: var(--secondary-color);
+      font-size: clamp(0.9rem, 3vw, 1rem);
+      text-align: center;
+    }
+
+    @keyframes pulse {
+      0%, 100% { 
+        opacity: 0.7; 
+        transform: scale(1); 
+      }
+      50% { 
+        opacity: 1; 
+        transform: scale(1.05); 
+      }
+    }
+
+    /* ========================
+       ASSISTENTE AG - 3D OTIMIZADO
+    ======================== */
+    .assistente-ag {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+    
+    /* Container do Avatar 3D */
+    #agAvatarContainer {
+      width: 120px;
+      height: 120px;
+      perspective: 1000px;
+      cursor: pointer;
+      margin: 0; /* Ajustado */
+    }
+
+    /* Avatar 3D */
+    .ag-avatar {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    
+    /* Efeito 3D no hover */
+    #agAvatarContainer:hover .ag-avatar {
+      transform: rotateY(15deg) rotateX(10deg) scale(1.05);
+    }
+    
+    /* Imagem do Avatar com efeito 3D */
+    .ag-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+      
+      /* Efeitos 3D */
+      transform: translateZ(20px);
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+      
+      /* Borda sutil para destacar */
+      border: 3px solid transparent;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4) border-box;
+      
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+    }
+
+    /* Animação de dança 3D */
+    .ag-dance {
+      animation: dance3D 4s ease-in-out infinite;
+    }
+
+    @keyframes dance3D {
+      0%, 100% {
+        transform: translateY(0px) rotateY(0deg) scale(1);
+      }
+      25% {
+        transform: translateY(-10px) rotateY(10deg) scale(1.02);
+      }
+      50% {
+        transform: translateY(-5px) rotateY(0deg) scale(1.05);
+      }
+      75% {
+        transform: translateY(-10px) rotateY(-10deg) scale(1.02);
+      }
+    }
+
+    /* Efeito de flutuação mais suave */
+    .ag-avatar::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+      border-radius: 50%;
+      z-index: -1;
+      opacity: 0.7;
+      filter: blur(15px);
+      animation: glow3D 3s ease-in-out infinite;
+    }
+
+    @keyframes glow3D {
+      0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+      }
+    }
+
+    /* Efeito de reflexo 3D */
+    .ag-avatar::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 10%;
+      width: 80%;
+      height: 20px;
+      background: radial-gradient(ellipse at center, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+      border-radius: 50%;
+      transform: rotateX(90deg) translateZ(-10px);
+      opacity: 0.6;
+      filter: blur(5px);
+    }
+
+    /* Efeito de clique */
+    .ag-avatar:active {
+      transform: scale(0.95) translateZ(10px);
+      transition: transform 0.1s ease;
+    }
+
+    .ag-chat {
+      position: absolute;
+      bottom: 85px;
+      right: 0;
+      width: 350px;
+      max-width: 90vw;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .ag-chat.active {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .ag-chat-header {
+      background: var(--primary-color);
+      color: white;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ag-chat-title {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .ag-chat-close {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    .ag-chat-messages {
+      padding: 1rem;
+      max-height: 300px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .ag-message {
+      padding: 0.75rem 1rem;
+      border-radius: 18px;
+      max-width: 85%;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .ag-message.ag {
+      background: var(--primary-color);
+      color: white;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+
+    .ag-message.user {
+      background: var(--card-bg);
+      border: 1px solid #ddd;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    .ag-chat-input {
+      display: flex;
+      padding: 1rem;
+      border-top: 1px solid #ddd;
+      background: var(--card-bg);
+    }
+
+    .ag-chat-input input {
+      flex: 1;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      outline: none;
+      font-size: 0.9rem;
+      background: var(--card-bg);
+      color: var(--text-color);
+    }
+
+    .ag-chat-input button {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      margin-left: 0.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Botões de ação rápida no AG */
+    .ag-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+      padding: 0 1rem 1rem;
+    }
+
+    .ag-action-btn {
+      background: var(--card-bg);
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-align: left;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ag-action-btn:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateX(5px);
+    }
+
+    .ag-action-btn i {
+      font-size: 1.1rem;
+    }
+
+    .ag-thinking {
+      animation: thinking 1.5s infinite ease-in-out;
+    }
+
+    @keyframes thinking {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(0.95); }
+    }
+
+    /* ========================
+       TEMA NATALINO AUTOMÁTICO
+    ======================== */
+    .snow-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+/* ========================
+   ASSISTENTE AG - IMAGEM SOLTA MAIOR
+======================= */
+.assistente-ag {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+/* Container simples - apenas para posicionamento */
+#agAvatarContainer {
+  width: auto;
+  height: auto;
+  cursor: pointer;
+  margin: 0;
+}
+
+/* Avatar maior */
+.ag-avatar {
+  width: 180px; /* Aumentado de 120px */
+  height: 180px; /* Aumentado de 120px */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Imagem solta e natural - maior */
+.ag-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  
+  /* Remove todos os efeitos anteriores */
+  transform: none !important;
+  filter: none !important;
+  border: none !important;
+  background: none !important;
+  border-radius: 0 !important;
+  
+  /* Efeito sutil no hover */
+  transition: transform 0.3s ease;
+}
+
+/* Efeito sutil no hover */
+#agAvatarContainer:hover .ag-avatar img {
+  transform: scale(1.05);
+}
+
+/* Remove todas as animações e efeitos anteriores */
+.ag-dance {
+  /* Remove a animação de dança */
+  animation: none !important;
+}
+
+.ag-avatar::before,
+.ag-avatar::after {
+  /* Remove os efeitos de glow e reflexo */
+  display: none !important;
+}
+
+/* Ajusta a posição do chat para ficar acima da imagem maior */
+.ag-chat {
+  position: absolute;
+  bottom: 200px; /* Aumentado de 140px para acomodar imagem maior */
+  right: 0;
+  width: 350px;
+  max-width: 90vw;
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.ag-chat.active {
+  display: flex;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Restante do chat mantém o mesmo estilo */
+.ag-chat-header {
+  background: var(--primary-color);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ag-chat-title {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.ag-chat-close {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.ag-chat-messages {
+  padding: 1rem;
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ag-message {
+  padding: 0.75rem 1rem;
+  border-radius: 18px;
+  max-width: 85%;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.ag-message.ag {
+  background: var(--primary-color);
+  color: white;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.ag-message.user {
+  background: var(--card-bg);
+  border: 1px solid #ddd;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.ag-chat-input {
+  display: flex;
+  padding: 1rem;
+  border-top: 1px solid #ddd;
+  background: var(--card-bg);
+}
+
+.ag-chat-input input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+  font-size: 0.9rem;
+  background: var(--card-bg);
+  color: var(--text-color);
+}
+
+.ag-chat-input button {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Botões de ação rápida no AG */
+.ag-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  padding: 0 1rem 1rem;
+}
+
+.ag-action-btn {
+  background: var(--card-bg);
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-align: left;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ag-action-btn:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: translateX(5px);
+}
+
+.ag-action-btn i {
+  font-size: 1.1rem;
+}
+
+.ag-thinking {
+  opacity: 0.7;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .ag-avatar {
+    width: 150px; /* Um pouco menor em tablets */
+    height: 150px;
+  }
+  
+  .ag-chat {
+    bottom: 170px; /* Ajustado para tablets */
+  }
+}
+
+@media (max-width: 480px) {
+  .assistente-ag {
+    bottom: 10px;
+    right: 10px;
+  }
+  
+  .ag-avatar {
+    width: 120px; /* Mantém um bom tamanho em mobile */
+    height: 120px;
+  }
+  
+  .ag-chat {
+    bottom: 140px; /* Ajustado para mobile */
+  }
+}
+    .snowflake {
+      position: absolute;
+      top: -10px;
+      color: #e0f7fa;
+      font-size: 1em;
+      user-select: none;
+      pointer-events: none;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+      }
+    }
+
+    .frozen {
+      position: relative;
+      overflow: hidden;
+      /* Indicativo visual de que está congelado */
+      border: 2px solid #b3e0ff !important; 
+    }
+
+    .frozen::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(173, 216, 230, 0.3);
+      border-radius: var(--border-radius);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .frozen::after {
+      content: '❄️';
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      font-size: 1.2rem;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .ice-crack {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      /* Corrigido para melhor visibilidade em temas claros/escuros */
+      background: 
+        radial-gradient(circle at 30% 30%, transparent 10px, rgba(255,255,255,0.9) 11px, transparent 12px),
+        radial-gradient(circle at 70% 70%, transparent 8px, rgba(255,255,255,0.9) 9px, transparent 10px),
+        radial-gradient(circle at 50% 20%, transparent 6px, rgba(255,255,255,0.9) 7px, transparent 8px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 3;
+      top: 0;
+      left: 0;
+    }
+
+    .breaking {
+      animation: breakIce 0.5s ease forwards;
+    }
+
+    @keyframes breakIce {
+      0% {
+        opacity: 0;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(1.2);
+      }
+    }
+
+    /* ========================
+       BREAKPOINTS ESPECÍFICOS
+    ======================== */
+    
+    /* Mobile Small (até 360px) */
+    @media (max-width: 360px) {
+      .container { width: 95%; padding: 0 0.5rem; }
+      .section { padding: 1.25rem; margin-bottom: 1rem; }
+      .dashboard-grid { gap: 1rem; }
+      .stat-card { padding: 1rem; min-height: 100px; }
+      .quick-actions { grid-template-columns: 1fr; }
+      .chart-label { min-width: 80px; font-size: 0.8rem; }
+      #agAvatarContainer { width: 80px; height: 80px; } /* Ajuste de tamanho */
+      .ag-chat { width: 280px; }
+    }
+
+    /* Mobile (até 480px) */
+    @media (max-width: 480px) {
+      .chart-bar { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+      .chart-bar-container { width: 100%; }
+      .assistente-ag { bottom: 10px; right: 10px; }
+    }
+/* ========================
+   ASSISTENTE AG - IMAGEM SOLTA SEM EFEITOS
+======================= */
+.assistente-ag {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+/* Container simples - apenas para posicionamento */
+#agAvatarContainer {
+  width: auto;
+  height: auto;
+  cursor: pointer;
+  margin: 0;
+}
+
+/* Avatar sem efeitos 3D */
+.ag-avatar {
+  width: 120px;
+  height: 120px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Imagem solta e natural */
+.ag-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  
+  /* Remove todos os efeitos anteriores */
+  transform: none !important;
+  filter: none !important;
+  border: none !important;
+  background: none !important;
+  border-radius: 0 !important;
+  
+  /* Efeito sutil no hover */
+  transition: transform 0.3s ease;
+}
+
+/* Efeito sutil no hover */
+#agAvatarContainer:hover .ag-avatar img {
+  transform: scale(1.05);
+}
+
+/* Remove todas as animações e efeitos anteriores */
+.ag-dance {
+  /* Remove a animação de dança */
+  animation: none !important;
+}
+
+.ag-avatar::before,
+.ag-avatar::after {
+  /* Remove os efeitos de glow e reflexo */
+  display: none !important;
+}
+
+/* Chat mantém o mesmo estilo */
+.ag-chat {
+  position: absolute;
+  bottom: 140px; /* Ajustado para ficar acima da imagem */
+  right: 0;
+  width: 350px;
+  max-width: 90vw;
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.ag-chat.active {
+  display: flex;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Restante do chat mantém o mesmo estilo */
+.ag-chat-header {
+  background: var(--primary-color);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ag-chat-title {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.ag-chat-close {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.ag-chat-messages {
+  padding: 1rem;
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ag-message {
+  padding: 0.75rem 1rem;
+  border-radius: 18px;
+  max-width: 85%;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.ag-message.ag {
+  background: var(--primary-color);
+  color: white;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.ag-message.user {
+  background: var(--card-bg);
+  border: 1px solid #ddd;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.ag-chat-input {
+  display: flex;
+  padding: 1rem;
+  border-top: 1px solid #ddd;
+  background: var(--card-bg);
+}
+
+.ag-chat-input input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+  font-size: 0.9rem;
+  background: var(--card-bg);
+  color: var(--text-color);
+}
+
+.ag-chat-input button {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Botões de ação rápida no AG */
+.ag-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  padding: 0 1rem 1rem;
+}
+
+.ag-action-btn {
+  background: var(--card-bg);
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-align: left;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ag-action-btn:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: translateX(5px);
+}
+
+.ag-action-btn i {
+  font-size: 1.1rem;
+}
+
+.ag-thinking {
+  opacity: 0.7;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  .assistente-ag {
+    bottom: 10px;
+    right: 10px;
+  }
+  
+  .ag-avatar {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .ag-chat {
+    bottom: 100px; /* Ajustado para mobile */
+  }
+}
+    /* Tablet (768px a 1024px) */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+      .quick-actions { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* Desktop (acima de 1024px) */
+    @media (min-width: 1024px) {
+      .dashboard-grid { grid-template-columns: repeat(3, 1fr); }
+      .quick-actions { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    /* ========================
+       ACESSIBILIDADE
+    ======================== */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Foco visível para acessibilidade */
+    .stat-card:focus-visible,
+    .action-btn:focus-visible,
+    .ag-action-btn:focus-visible,
+    #agAvatarContainer:focus-visible { /* Adicionado foco para o avatar */
+      outline: 3px solid var(--primary-color);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="preloader">
+  <div class="preloader-logo">Dashboard</div>
+  <div class="preloader-text">Carregando dados...</div>
+</div>
+
+<div class="snow-container" id="snowContainer" aria-hidden="true"></div>
+
+<main class="main-content container" role="main">
+  <section class="section">
+    <h1 class="section-title">Dashboard Geral</h1>
+    
+    <div class="dashboard-grid">
+      <div class="stat-card primary" role="button" tabindex="0" onclick="window.location.href='#'">
+        <h3 class="stat-value" id="agendamentosHoje">0</h3>
+        <p class="stat-label">Agendamentos Hoje</p>
+      </div>
+      <div class="stat-card success" role="button" tabindex="0" onclick="window.location.href='#'">
+        <h3 class="stat-value" id="agendamentosMes">0</h3>
+        <p class="stat-label">Agendamentos Este Mês</p>
+      </div>
+      <div class="stat-card warning" role="button" tabindex="0" onclick="window.location.href='#'">
+        <h3 class="stat-value" id="servicosDisponiveis">0</h3>
+        <p class="stat-label">Serviços Disponíveis</p>
+      </div>
+      <div class="stat-card danger" role="button" tabindex="0" onclick="window.location.href='#'">
+        <h3 class="stat-value" id="totalClientes">0</h3>
+        <p class="stat-label">Total de Clientes</p>
+      </div>
+      <div class="stat-card info" role="button" tabindex="0" onclick="window.location.href='#'">
+        <h3 class="stat-value" id="agendamentosPendentes">0</h3>
+        <p class="stat-label">Agendamentos Pendentes</p>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <a href="agendamento.html" class="action-btn"> Novo Agendamento</a>
+      <a href="servicos.html" class="action-btn"> Gerenciar Serviços</a>
+      <a href="clientes.html" class="action-btn"> Ver Clientes</a>
+      <a href="configuracoes.html" class="action-btn"> Configurações</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <h3 class="chart-title">Status dos Agendamentos</h3>
+    <div class="chart" id="graficoStatus">
+      </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Agendamentos Recentes</h2>
+    <div class="table-responsive">
+      <table class="table table-striped" id="tabelaAgendamentos" aria-live="polite">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Serviço</th>
+            <th>Data</th>
+            <th>Hora</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaAgendamentosBody">
+          <tr><td colspan="5" style="text-align: center;">Carregando agendamentos...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<div class="assistente-ag">
+  <div class="ag-chat" id="agChat" role="dialog" aria-modal="false" aria-labelledby="agChatTitle">
+    <div class="ag-chat-header">
+      <div class="ag-chat-title" id="agChatTitle">Assistente AG</div>
+      <button class="ag-chat-close" id="agClose" aria-label="Fechar Chat">✕</button>
+    </div>
+    <div class="ag-chat-messages" id="agMessages" role="log" aria-live="polite">
+      </div>
+    
+    <div class="ag-actions">
+      <button class="ag-action-btn" data-action="tutorial">
+        <i></i> Tutorial Completo
+      </button>
+      <button class="ag-action-btn" data-action="agendamento">
+        <i></i> Criar Agendamento
+      </button>
+      <button class="ag-action-btn" data-action="servico">
+        <i></i> Cadastrar Serviços
+      </button>
+      <button class="ag-action-btn" data-action="cliente">
+        <i></i> Gerenciar Clientes
+      </button>
+    </div>
+    
+    <div class="ag-chat-input">
+      <input type="text" id="agInput" placeholder="Digite sua pergunta..." aria-label="Digite sua pergunta">
+      <button id="agSend" aria-label="Enviar Mensagem">➤</button>
+    </div>
+  </div>
+  <div class="ag-avatar-container" id="agAvatarContainer" role="button" tabindex="0" aria-label="Abrir Assistente Virtual AG">
+    <div class="ag-avatar ag-dance" id="agAvatar">
+      <img src="Gemini_Generated_Image_fbi50nfbi50nfbi5-removebg-preview.png" alt="Assistente Virtual AG, um boneco azul amigável.">
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container footer-content">
+    <div class="footer-brand">
+      <a href="#" class="logo">Agendamento+</a>
+      <p>Sistema de Agendamento Online</p>
+    </div>
+    <nav class="footer-nav" aria-label="Navegação do Rodapé">
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="serviços.html" class="nav-link">Serviços</a>
+      <a href="agendamento.html" class="nav-link">Agendamentos</a>
+      <a href="clientes.html" class="nav-link">Clientes</a>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+    </nav>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/pauloryantomaz/" target="_blank" class="footer-link">Instagram</a>
+      <a href="https://wa.me/5561985825956" target="_blank" class="footer-link">WhatsApp</a>
+    </div>
+  </div>
+  <div class="footer-copy">
+    <p>&copy; 2025 Agendamento+. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<script src="header.js"></script>
+<script>
+// =====================
+// DASHBOARD COM BANCO DE DADOS FLASK
+// =====================
+document.addEventListener('DOMContentLoaded', () => {
+  
+  // =====================
+  // FUNÇÕES DE UTILIDADE
+  // =====================
+  
+  /**
+   * Formata a data de 'YYYY-MM-DD' para 'DD/MM/YYYY'.
+   * @param {string} data - A data no formato YYYY-MM-DD.
+   * @returns {string} A data formatada.
+   */
+  function formatarData(data) {
+    if (!data) return '';
+    try {
+      const [ano, mes, dia] = data.split('-');
+      return `${dia}/${mes}/${ano}`;
+    } catch {
+      return data; // Retorna a data original se houver erro de split
+    }
+  }
+
+  // =====================
+  // CARREGAR DADOS DO BANCO
+  // =====================
+  
+  /**
+   * Busca e carrega todos os dados do dashboard.
+   */
+  async function carregarDashboard() {
+    try {
+      const [agendamentosResponse, estatisticasResponse] = await Promise.all([
+        fetch('/api/agendamentos'),
+        fetch('/api/dashboard/estatisticas')
+      ]);
+
+      if (!agendamentosResponse.ok || !estatisticasResponse.ok) {
+        throw new Error('Erro ao buscar dados da API');
+      }
+
+      const agendamentos = await agendamentosResponse.json();
+      const estatisticas = await estatisticasResponse.json();
+
+      atualizarEstatisticas(estatisticas);
+      carregarAgendamentosRecentes(agendamentos);
+      atualizarGraficoStatus(estatisticas);
+
+    } catch (error) {
+      console.error('Erro ao carregar dashboard:', error);
+      document.getElementById('tabelaAgendamentosBody').innerHTML = 
+        '<tr><td colspan="5" style="text-align: center;">Erro ao carregar dados</td></tr>';
+    }
+  }
+
+  /**
+   * Atualiza os cards de estatísticas.
+   * @param {object} estatisticas - Objeto contendo os dados de estatística.
+   */
+  function atualizarEstatisticas(estatisticas) {
+    document.getElementById('agendamentosHoje').textContent = estatisticas.agendamentos_hoje || 0;
+    document.getElementById('agendamentosMes').textContent = estatisticas.agendamentos_mes || 0;
+    document.getElementById('servicosDisponiveis').textContent = estatisticas.total_servicos || 0;
+    document.getElementById('totalClientes').textContent = estatisticas.total_clientes || 0;
+    document.getElementById('agendamentosPendentes').textContent = estatisticas.agendamentos_pendentes || 0;
+  }
+
+  /**
+   * Carrega e exibe os agendamentos mais recentes na tabela.
+   * @param {Array<object>} agendamentos - Lista de objetos de agendamento.
+   */
+  function carregarAgendamentosRecentes(agendamentos) {
+    const tbody = document.getElementById('tabelaAgendamentosBody');
+    tbody.innerHTML = '';
+
+    const recentes = (agendamentos || [])
+      .sort((a, b) => new Date(b.data_agendamento + 'T' + b.hora_agendamento) - new Date(a.data_agendamento + 'T' + a.hora_agendamento))
+      .slice(0, 5);
+
+    if (recentes.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Nenhum agendamento recente encontrado</td></tr>';
+      return;
+    }
+
+    recentes.forEach(agendamento => {
+      const tr = document.createElement('tr');
+      const status = agendamento.status ? agendamento.status.toLowerCase() : 'pendente';
+      let statusClass = 'warning'; 
+      let statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
+      
+      if (status === 'realizado') {
+        statusClass = 'success';
+      } else if (status === 'confirmado') {
+        statusClass = 'info';
+      } else if (status === 'cancelado') {
+        statusClass = 'danger';
+      }
+
+      tr.innerHTML = `
+        <td>${agendamento.cliente_nome || 'N/A'}</td>
+        <td>${agendamento.servico_nome || 'N/A'}</td>
+        <td>${formatarData(agendamento.data_agendamento)}</td>
+        <td>${agendamento.hora_agendamento || 'N/A'}</td>
+        <td>
+          <span style="padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; background-color: var(--${statusClass}-color); color: white;">
+            ${statusLabel}
+          </span>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  /**
+   * Gera e anima o gráfico de status de agendamentos.
+   * @param {object} estatisticas - Objeto contendo os dados de estatística.
+   */
+  function atualizarGraficoStatus(estatisticas) {
+    const graficoStatus = document.getElementById('graficoStatus');
+    
+    const statusData = [
+      { label: 'Pendentes', value: estatisticas.agendamentos_pendentes || 0, color: 'var(--warning-color)' },
+      { label: 'Confirmados', value: estatisticas.agendamentos_confirmados || 0, color: 'var(--info-color)' },
+      { label: 'Realizados', value: estatisticas.agendamentos_realizados || 0, color: 'var(--success-color)' },
+      { label: 'Cancelados', value: estatisticas.agendamentos_cancelados || 0, color: 'var(--danger-color)' }
+    ];
+
+    const total = statusData.reduce((sum, item) => sum + item.value, 0);
+
+    if (total === 0) {
+      graficoStatus.innerHTML = '<p style="text-align: center; color: var(--secondary-color);">Nenhum dado disponível para o gráfico</p>';
+      return;
+    }
+
+    // Cria o gráfico de barras
+    let chartHTML = '';
+    statusData.forEach(item => {
+      const porcentagem = total > 0 ? (item.value / total) * 100 : 0;
+      chartHTML += `
+        <div class="chart-bar">
+          <span class="chart-label">${item.label}</span>
+          <div class="chart-bar-container">
+            <div class="chart-bar-fill" style="width: 0%; background: ${item.color}" data-width="${porcentagem.toFixed(1)}">
+              ${item.value} (${porcentagem.toFixed(1)}%)
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    graficoStatus.innerHTML = chartHTML;
+
+    // Anima as barras após a injeção no DOM
+    setTimeout(() => {
+      const bars = graficoStatus.querySelectorAll('.chart-bar-fill');
+      bars.forEach(bar => {
+        bar.style.width = bar.getAttribute('data-width') + '%';
+      });
+    }, 100);
+  }
+
+  // =====================
+  // ASSISTENTE AG (REFACTOR)
+  // =====================
+  
+  const FAQ_RESPONSES = {
+    'tutorial': 'Vou te dar um tutorial rápido: 1) No menu Agendamentos, clique em "Novo Agendamento"; 2) Selecione o cliente e serviço; 3) Escolha data e hora; 4) Confirme. Pronto!',
+    'serviço': 'Para cadastrar um serviço: 1) Vá em "Serviços"; 2) Clique em "Novo Serviço"; 3) Preencha nome, descrição e preço; 4) Salve.',
+    'cliente': 'Para cadastrar um cliente: 1) Vá em "Clientes"; 2) Clique em "Novo Cliente"; 3) Preencha nome, telefone e email; 4) Salve.',
+    'agendamento': 'Para criar um agendamento: 1) Vá em "Agendamentos"; 2) Clique em "Novo Agendamento"; 3) Selecione cliente, serviço, data e hora; 4) Confirme.',
+    'dashboard': 'O Dashboard mostra uma visão geral: estatísticas de agendamentos, gráficos de status e agendamentos recentes. É sua tela principal!',
+    'ajuda': 'Posso ajudar com: criar agendamentos, gerenciar serviços, visualizar clientes ou explicar funcionalidades. O que você precisa?',
+    'suporte': 'Para suporte técnico, entre em contato pelo WhatsApp: (61) 98582-5956 ou Instagram: @pauloryantomaz'
+  };
+
+  const agAvatarContainer = document.getElementById('agAvatarContainer');
+  const agAvatar = document.getElementById('agAvatar');
+  const agChat = document.getElementById('agChat');
+  const agMessages = document.getElementById('agMessages');
+  const agInput = document.getElementById('agInput');
+  const agSend = document.getElementById('agSend');
+  const agClose = document.getElementById('agClose');
+  const agActionButtons = document.querySelectorAll('.ag-action-btn');
+  
+  let isChatOpen = false;
+  let hasInteracted = false;
+
+  /**
+   * Adiciona uma mensagem ao chat.
+   * @param {string} message - O conteúdo da mensagem.
+   * @param {boolean} isUser - true se a mensagem for do usuário, false se for do AG.
+   */
+  function agSendMessage(message, isUser = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `ag-message ${isUser ? 'user' : 'ag'}`;
+    messageDiv.textContent = message;
+    agMessages.appendChild(messageDiv);
+    agMessages.scrollTop = agMessages.scrollHeight;
+  }
+
+  /**
+   * Processa a pergunta do usuário e retorna a resposta.
+   * @param {string} question - A pergunta do usuário.
+   * @returns {string} A resposta do assistente.
+   */
+  function processUserQuestion(question) {
+    const cleanQuestion = question.toLowerCase().trim();
+    
+    for (const [keyword, response] of Object.entries(FAQ_RESPONSES)) {
+      if (cleanQuestion.includes(keyword) || cleanQuestion.includes(keyword.replace('ç', 'c'))) {
+        return response;
+      }
+    }
+    
+    return "Desculpe, não entendi sua pergunta. Tente usar palavras-chave como 'agendamento', 'serviço' ou 'tutorial'.";
+  }
+
+  /**
+   * Simula o efeito de digitação do AG.
+   * @param {string} message - A mensagem a ser digitada.
+   */
+  function agTypeMessage(message, delay = 30) {
+    return new Promise(resolve => {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'ag-message ag';
+      agMessages.appendChild(messageDiv);
+      agMessages.scrollTop = agMessages.scrollHeight;
+      
+      let i = 0;
+      const typing = setInterval(() => {
+        if (i < message.length) {
+          messageDiv.textContent += message.charAt(i);
+          i++;
+          agMessages.scrollTop = agMessages.scrollHeight;
+        } else {
+          clearInterval(typing);
+          resolve();
+        }
+      }, delay);
+    });
+  }
+
+  /**
+   * Trata a submissão de mensagens.
+   */
+  async function sendMessage() {
+    const question = agInput.value.trim();
+    if (question === '') return;
+    
+    agSendMessage(question, true);
+    agInput.value = '';
+    
+    // Simula processamento
+    agAvatar.classList.remove('ag-dance');
+    agAvatar.classList.add('ag-thinking');
+    
+    await new Promise(r => setTimeout(r, 800)); // Pequena pausa
+    
+    const response = processUserQuestion(question);
+    await agTypeMessage(response);
+    
+    agAvatar.classList.remove('ag-thinking');
+    if (isChatOpen) {
+       agInput.focus();
+    } else {
+       agAvatar.classList.add('ag-dance');
+    }
+    hasInteracted = true;
+  }
+
+  /**
+   * Alterna a visibilidade do chat.
+   */
+  function toggleChat() {
+    isChatOpen = !isChatOpen;
+    agChat.classList.toggle('active', isChatOpen);
+    agAvatar.classList.toggle('active', isChatOpen);
+    agChat.setAttribute('aria-modal', isChatOpen);
+
+    if (isChatOpen) {
+      agAvatar.classList.remove('ag-dance');
+      agAvatar.classList.add('ag-thinking');
+      agInput.focus();
+
+      // Injeta mensagem de boas-vindas na abertura
+      if (!hasInteracted) {
+         agTypeMessage("Olá! Eu sou o AG, seu assistente virtual. Como posso ajudar você hoje?");
+      }
+    } else {
+      agAvatar.classList.remove('ag-thinking');
+      agAvatar.classList.add('ag-dance');
+    }
+  }
+
+  // Event Listeners do AG
+  agAvatarContainer.addEventListener('click', toggleChat);
+  agAvatarContainer.addEventListener('keypress', (e) => { // Acessibilidade com teclado
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleChat();
+    }
+  });
+  agClose.addEventListener('click', toggleChat);
+  agSend.addEventListener('click', sendMessage);
+  agInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+
+  // Ações rápidas
+  agActionButtons.forEach(button => {
+    button.addEventListener('click', async () => {
+      const action = button.getAttribute('data-action');
+      const actionLabel = button.textContent.trim();
+      
+      // Simula o envio da pergunta como se o usuário tivesse digitado
+      agSendMessage(actionLabel, true);
+
+      agAvatar.classList.remove('ag-dance');
+      agAvatar.classList.add('ag-thinking');
+      await new Promise(r => setTimeout(r, 800));
+
+      const response = processUserQuestion(action);
+      await agTypeMessage(response);
+      
+      agAvatar.classList.remove('ag-thinking');
+      agInput.focus();
+    });
+  });
+
+  // Inicia a dança do AG
+  agAvatar.classList.add('ag-dance');
+
+  // =====================
+  // TEMA NATALINO AUTOMÁTICO
+  // =====================
+  
+  const snowContainer = document.getElementById('snowContainer');
+  let snowInterval;
+  let freezeInterval;
+
+  function createSnowflake() {
+    const snowflake = document.createElement('div');
+    snowflake.classList.add('snowflake');
+    snowflake.innerHTML = '❄';
+    snowflake.style.left = Math.random() * 100 + 'vw';
+    snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+    snowflake.style.opacity = Math.random() * 0.6 + 0.4;
+    snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+    
+    snowContainer.appendChild(snowflake);
+    
+    setTimeout(() => {
+      if (snowflake.parentNode) {
+        snowflake.parentNode.removeChild(snowflake);
+      }
+    }, 5000);
+  }
+
+  function freezeRandomElement() {
+    const elements = document.querySelectorAll('.stat-card, .action-btn, .ag-action-btn');
+    // Filtra elementos que já estão congelados
+    const availableElements = Array.from(elements).filter(el => !el.classList.contains('frozen'));
+
+    if (availableElements.length === 0) return;
+    
+    const randomElement = availableElements[Math.floor(Math.random() * availableElements.length)];
+    
+    randomElement.classList.add('frozen');
+    
+    // Adiciona efeito de rachadura no gelo
+    const iceCrack = document.createElement('div');
+    iceCrack.classList.add('ice-crack');
+    randomElement.appendChild(iceCrack);
+    
+    // Remove o gelo após alguns segundos
+    setTimeout(() => {
+      if (randomElement.classList.contains('frozen')) {
+        randomElement.classList.remove('frozen');
+        if (iceCrack.parentNode) {
+          iceCrack.parentNode.removeChild(iceCrack);
+        }
+      }
+    }, 10000);
+  }
+
+  function breakIce(element) {
+    const iceCrack = element.querySelector('.ice-crack');
+    if (iceCrack) {
+      iceCrack.classList.add('breaking');
+      setTimeout(() => {
+        element.classList.remove('frozen');
+        if (iceCrack.parentNode) {
+          iceCrack.parentNode.removeChild(iceCrack);
+        }
+      }, 500);
+    }
+  }
+
+  // Event listener para quebrar o gelo ao clicar ou teclar Enter/Espaço
+  document.addEventListener('click', (e) => {
+    const frozenElement = e.target.closest('.frozen');
+    if (frozenElement) {
+      breakIce(frozenElement);
+    }
+  });
+
+  document.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      const activeElement = document.activeElement;
+      if (activeElement && activeElement.classList.contains('frozen')) {
+        breakIce(activeElement);
+      }
+    }
+  });
+
+  // Iniciar efeitos natalinos automaticamente
+  function iniciarTemaNatalino() {
+    // Iniciar neve
+    snowInterval = setInterval(createSnowflake, 100);
+    
+    // Iniciar congelamento
+    freezeInterval = setInterval(freezeRandomElement, 5000);
+  }
+
+  // Iniciar automaticamente quando a página carregar
+  iniciarTemaNatalino();
+
+  // =====================
+  // EVENTOS E LISTENERS
+  // =====================
+  
+  // Atualiza quando a página ganha foco
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      carregarDashboard();
+    }
+  });
+
+  // =====================
+  // INICIALIZAÇÃO
+  // =====================
+  
+  // Carregar dados ao iniciar
+  carregarDashboard();
+
+  // Preloader
+  window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    const minLoadTime = 1500;
+    const loadStart = Date.now();
+    
+    // Garante que o preloader fica visível por no mínimo 1.5s
+    setTimeout(() => {
+      const loadTime = Date.now() - loadStart;
+      const remainingTime = Math.max(3000 - loadTime, 0);
+      
+      setTimeout(() => {
+        preloader.classList.add('hidden');
+        // Remove do DOM após a transição
+        setTimeout(() => preloader.remove(), 300); 
+      }, remainingTime);
+    }, minLoadTime);
+  });
+
+  // Atualiza dados a cada 30 segundos
+  setInterval(carregarDashboard, 30000);
+});
+// REMOVA ou COMENTE estas linhas do JavaScript:
+
+// Remove a classe de dança quando o chat abre
+// agAvatar.classList.remove('ag-dance');
+
+// Remove a classe de thinking quando o chat fecha  
+// agAvatar.classList.remove('ag-thinking');
+
+// Não adiciona a classe de dança de volta
+// agAvatar.classList.add('ag-dance');
+
+// No toggleChat, simplifique para:
+function toggleChat() {
+    isChatOpen = !isChatOpen;
+    agChat.classList.toggle('active', isChatOpen);
+    
+    if (isChatOpen) {
+        agInput.focus();
+        // Injeta mensagem de boas-vindas na abertura
+        if (!hasInteracted) {
+            agTypeMessage("Olá! Eu sou o AG, seu assistente virtual. Como posso ajudar você hoje?");
+        }
+    }
+}
+
+// Remova também estas linhas do evento de ações rápidas:
+// agAvatar.classList.remove('ag-dance');
+// agAvatar.classList.add('ag-thinking');
+// agAvatar.classList.remove('ag-thinking');
+</script>
+</body>
+</html>

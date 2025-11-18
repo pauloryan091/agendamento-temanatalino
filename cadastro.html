@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro - Agendamento+</title>
+  
+  <!-- Meta tags para PWA e responsividade -->
+  <meta name="theme-color" content="#007bff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#007bff">
+  <meta name="msapplication-navbutton-color" content="#007bff">
+  
+  <!-- CSS do Header -->
+  <link rel="stylesheet" href="header.css">
+  
+  <style>
+    /* ========================
+   MODAL DE ALERTA
+======================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal {
+    transform: translateY(0);
+}
+
+.modal-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--danger-color);
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.modal-message {
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+.modal-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+    /* ========================
+       TEMA CLARO/ESCURO - OTIMIZADO
+    ======================== */
+    :root {
+      --bg-color: #f4f4f4;
+      --text-color: #333;
+      --card-bg: #fff;
+      --primary-color: #007bff;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --info-color: #17a2b8;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+    }
+    
+    [data-theme="dark"] {
+      --bg-color: #1e1e1e;
+      --text-color: #f4f4f4;
+      --card-bg: #2a2a2a;
+      --primary-color: #0d6efd;
+      --secondary-color: #5a6268;
+      --success-color: #218838;
+      --warning-color: #e0a800;
+      --danger-color: #c82333;
+      --info-color: #138496;
+      --shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    /* ========================
+       RESET E BASE RESPONSIVA
+    ======================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      transition: var(--transition);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* ========================
+       MAIN CONTENT RESPONSIVO
+    ======================== */
+    .main-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 0;
+      min-height: calc(100vh - 140px);
+    }
+
+    .section {
+      background: var(--card-bg);
+      padding: clamp(1.5rem, 4vw, 2rem);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      color: var(--text-color);
+      font-weight: 700;
+    }
+
+    /* ========================
+       FORMULÁRIO RESPONSIVO
+    ======================== */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text-color);
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border-radius: var(--border-radius);
+      border: 2px solid #ddd;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      background: var(--card-bg);
+      color: var(--text-color);
+      transition: all 0.3s ease;
+    }
+
+    [data-theme="dark"] .form-control {
+      border-color: #444;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 1rem;
+      border: none;
+      border-radius: var(--border-radius);
+      background-color: var(--primary-color);
+      color: white;
+      font-size: clamp(1rem, 2.5vw, 1.125rem);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-height: 50px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      background-color: #0056b3;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
+    }
+
+    .login-link a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+
+    /* ========================
+       FOOTER RESPONSIVO
+    ======================== */
+    .footer {
+      background: var(--card-bg);
+      padding: 2rem 0 1rem;
+      text-align: center;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      margin-top: auto;
+      width: 100%;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        text-align: left;
+      }
+    }
+
+    .footer-brand {
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-brand {
+        text-align: left;
+      }
+    }
+
+    .footer-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-nav {
+        justify-content: flex-start;
+      }
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-social {
+        justify-content: flex-end;
+      }
+    }
+
+    .footer-nav a,
+    .footer-social a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-weight: 500;
+    }
+
+    .footer-nav a:hover,
+    .footer-social a:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+
+    .footer-copy {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #ddd;
+      color: var(--secondary-color);
+    }
+
+    [data-theme="dark"] .footer-copy {
+      border-top-color: #444;
+    }
+
+    /* ========================
+       PRELOADER OTIMIZADO
+    ======================== */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    #preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .preloader-logo {
+      font-size: clamp(1.5rem, 8vw, 2.5rem);
+      font-weight: 700;
+      color: var(--primary-color);
+      animation: pulse 1.2s infinite ease-in-out;
+      margin-bottom: 1rem;
+    }
+
+    .preloader-text {
+      color: var(--secondary-color);
+      font-size: clamp(0.9rem, 3vw, 1rem);
+      text-align: center;
+    }
+
+    @keyframes pulse {
+      0%, 100% { 
+        opacity: 0.7; 
+        transform: scale(1); 
+      }
+      50% { 
+        opacity: 1; 
+        transform: scale(1.05); 
+      }
+    }
+
+    /* ========================
+       BREAKPOINTS ESPECÍFICOS
+    ======================== */
+    
+    /* Mobile Small (até 360px) */
+    @media (max-width: 360px) {
+      .container {
+        width: 95%;
+        padding: 0 0.5rem;
+      }
+      
+      .section {
+        padding: 1.25rem;
+      }
+      
+      .btn {
+        min-height: 45px;
+        padding: 0.875rem;
+      }
+    }
+
+    /* Mobile (até 480px) */
+    @media (max-width: 480px) {
+      .main-content {
+        padding: 1rem;
+      }
+    }
+
+    /* Tablet (768px a 1024px) */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .section {
+        max-width: 450px;
+        padding: 2.5rem;
+      }
+    }
+
+    /* Alturas específicas para mobile */
+    @media (max-height: 600px) {
+      .main-content {
+        padding: 1rem;
+        min-height: auto;
+      }
+      
+      .section {
+        margin: 1rem auto;
+      }
+    }
+
+    /* ========================
+       ACESSIBILIDADE
+    ======================== */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Foco visível para acessibilidade */
+    .btn:focus-visible,
+    .form-control:focus-visible {
+      outline: 3px solid var(--primary-color);
+      outline-offset: 2px;
+    }
+    /* NEVE NATALINA - snow.css */
+.snow-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.snowflake {
+  position: absolute;
+  top: -10px;
+  color: #e0f7fa;
+  font-size: 1em;
+  user-select: none;
+  pointer-events: none;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+  }
+}
+
+.frozen {
+  position: relative;
+  overflow: hidden;
+}
+
+.frozen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(173, 216, 230, 0.3);
+  border: 2px solid #b3e0ff;
+  border-radius: 12px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.frozen::after {
+  content: '❄️';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 1.2rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ice-crack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 30% 30%, transparent 10px, rgba(255,255,255,0.8) 11px, transparent 12px),
+    radial-gradient(circle at 70% 70%, transparent 8px, rgba(255,255,255,0.8) 9px, transparent 10px),
+    radial-gradient(circle at 50% 20%, transparent 6px, rgba(255,255,255,0.8) 7px, transparent 8px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.breaking {
+  animation: breakIce 0.5s ease forwards;
+}
+
+@keyframes breakIce {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}
+/* NEVE NATALINA - snow.css */
+.snow-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.snowflake {
+  position: absolute;
+  top: -10px;
+  color: #e0f7fa;
+  font-size: 1em;
+  user-select: none;
+  pointer-events: none;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+  }
+}
+
+.frozen {
+  position: relative;
+  overflow: hidden;
+}
+
+.frozen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(173, 216, 230, 0.3);
+  border: 2px solid #b3e0ff;
+  border-radius: 12px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.frozen::after {
+  content: '❄️';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 1.2rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ice-crack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 30% 30%, transparent 10px, rgba(255,255,255,0.8) 11px, transparent 12px),
+    radial-gradient(circle at 70% 70%, transparent 8px, rgba(255,255,255,0.8) 9px, transparent 10px),
+    radial-gradient(circle at 50% 20%, transparent 6px, rgba(255,255,255,0.8) 7px, transparent 8px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.breaking {
+  animation: breakIce 0.5s ease forwards;
+}
+
+@keyframes breakIce {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}
+  </style>
+</head>
+<body>
+
+<!-- Preloader Otimizado -->
+<div id="preloader">
+  <div class="preloader-logo">Cadastro</div>
+  <div class="preloader-text">Carregando formulário...</div>
+</div>
+
+<header>
+  <div class="container header-content">
+    <a href="index.html" class="logo">Agendamento+</a>
+    <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
+      Tema Escuro
+    </button>
+  </div>
+</header>
+
+<main class="main-content">
+  <div class="container">
+    <section class="section">
+      <h1 class="section-title">Criar Conta</h1>
+      <form id="cadastroForm">
+        <div class="form-group">
+          <label for="nome" class="form-label">Nome Completo</label>
+          <input type="text" id="nome" name="nome" class="form-control" placeholder="Digite seu nome completo" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="seu@email.com" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="senha" class="form-label">Senha</label>
+          <input type="password" id="senha" name="senha" class="form-control" placeholder="Crie uma senha segura" required>
+        </div>
+        
+        <button type="submit" class="btn">Criar Conta</button>
+      </form>
+      
+      <div class="login-link">
+        <p>Já tem uma conta? <a href="/">Faça login aqui</a></p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="#" class="logo">Agendamento+</a>
+        <p>Sistema de Agendamento Online</p>
+      </div>
+      
+   
+
+      <div class="footer-social">
+        <a href="https://www.instagram.com/pauloryantomaz/" target="_blank" 
+           aria-label="Instagram" class="footer-link">Instagram</a>
+        <a href="https://wa.me/5561985825956" target="_blank" 
+           aria-label="WhatsApp" class="footer-link">WhatsApp</a>
+      </div>
+    </div>
+    
+    <div class="footer-copy">
+      <p>&copy; 2025 Agendamento+. Todos os direitos reservados.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // =====================
+  // TEMA CLARO / ESCURO
+  // =====================
+  const themeToggle = document.getElementById("themeToggle");
+  const currentTheme = localStorage.getItem("theme") || "light";
+  
+  // Aplicar tema salvo
+  document.documentElement.setAttribute("data-theme", currentTheme);
+  updateButtonText();
+
+  themeToggle.addEventListener("click", () => {
+    const newTheme = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+    updateButtonText();
+  });
+
+  function updateButtonText() {
+    const theme = document.documentElement.getAttribute("data-theme");
+    themeToggle.textContent = theme === "light" ? "Tema Escuro" : "Tema Claro";
+    themeToggle.setAttribute('aria-label', 
+      theme === "light" ? "Mudar para tema escuro" : "Mudar para tema claro");
+  }
+
+  // =====================
+  // PRELOADER - 3 SEGUNDOS
+  // =====================
+  window.addEventListener("load", () => {
+    const preloader = document.getElementById("preloader");
+    
+    // Garantir que o preloader fique pelo menos 1.5 segundos
+    const minLoadTime = 1500;
+    const loadStart = Date.now();
+    
+    setTimeout(() => {
+      const loadTime = Date.now() - loadStart;
+      const remainingTime = Math.max(3000 - loadTime, 0);
+      
+      setTimeout(() => {
+        preloader.classList.add("hidden");
+        
+        // Remover completamente do DOM após animação
+        setTimeout(() => {
+          preloader.remove();
+        }, 300);
+      }, remainingTime);
+    }, minLoadTime);
+  });
+
+  // =====================
+  // FORMULÁRIO DE CADASTRO (MANTIDO ORIGINAL)
+  // =====================
+  document.getElementById("cadastroForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    
+    const formData = {
+      nome: document.getElementById('nome').value,
+      email: document.getElementById('email').value,
+      senha: document.getElementById('senha').value
+    };
+    
+    fetch('/api/cadastro', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert(data.message);
+        window.location.href = '/';
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Erro:', error);
+      alert('Erro ao cadastrar');
+    });
+  });
+
+  // =====================
+  // MELHORIAS DE USABILIDADE
+  // =====================
+  
+  // Foco no campo de nome ao carregar
+  window.addEventListener('load', function() {
+    const nomeField = document.getElementById('nome');
+    if (nomeField) {
+      setTimeout(() => {
+        nomeField.focus();
+      }, 500);
+    }
+  });
+
+  // Navegação por teclado no formulário
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && e.target.type !== 'submit') {
+      const form = document.getElementById('cadastroForm');
+      const inputs = Array.from(form.querySelectorAll('input'));
+      const currentIndex = inputs.indexOf(e.target);
+      
+      if (currentIndex < inputs.length - 1) {
+        e.preventDefault();
+        inputs[currentIndex + 1].focus();
+      }
+    }
+  });
+  // =====================
+// PROTEÇÃO DE NAVEGAÇÃO NO FOOTER
+// =====================
+document.addEventListener('DOMContentLoaded', function() {
+    const footerLinks = document.querySelectorAll('.footer-link');
+    const loginAlertModal = document.getElementById('loginAlertModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    
+    // Criar modal de alerta se não existir
+    if (!loginAlertModal) {
+        const modalHTML = `
+            <div class="modal-overlay" id="loginAlertModal">
+                <div class="modal">
+                    <div class="modal-icon">⚠️</div>
+                    <h2 class="modal-title">Acesso Restrito</h2>
+                    <p class="modal-message">Faça login primeiro para entrar nesta página...</p>
+                    <button class="modal-btn" id="closeModalBtn">Entendi</button>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+    
+    // Verificar se o usuário está logado
+    function isUserLoggedIn() {
+        return localStorage.getItem('isLoggedIn') === 'true';
+    }
+    
+    // Função para mostrar o modal
+    function showLoginAlert() {
+        const modal = document.getElementById('loginAlertModal');
+        modal.classList.add('active');
+        document.getElementById('closeModalBtn').focus();
+    }
+    
+    // Função para fechar o modal
+    function closeLoginAlert() {
+        const modal = document.getElementById('loginAlertModal');
+        modal.classList.remove('active');
+    }
+    
+    // Adicionar evento de clique para todos os links do footer
+    footerLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Permitir links externos (Instagram, WhatsApp) e a página atual
+            if (this.href.includes('instagram.com') || 
+                this.href.includes('wa.me') ||
+                this.href.includes('cadastro.html') ||
+                this.href === window.location.href) {
+                return; // Não fazer nada, permitir navegação normal
+            }
+            
+            // Verificar se o usuário não está logado
+            if (!isUserLoggedIn()) {
+                e.preventDefault(); // Impedir navegação
+                showLoginAlert(); // Mostrar alerta
+            }
+            // Se o usuário estiver logado, permitir navegação normal
+        });
+    });
+    
+    // Fechar modal com botão
+    document.addEventListener('click', function(e) {
+        if (e.target.id === 'closeModalBtn') {
+            closeLoginAlert();
+        }
+    });
+    
+    // Fechar modal clicando fora
+    document.addEventListener('click', function(e) {
+        const modal = document.getElementById('loginAlertModal');
+        if (e.target === modal) {
+            closeLoginAlert();
+        }
+    });
+    
+    // Fechar modal com tecla ESC
+    document.addEventListener('keydown', function(e) {
+        const modal = document.getElementById('loginAlertModal');
+        if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
+            closeLoginAlert();
+        }
+    });
+});
+// NEVE NATALINA - snow.js
+document.addEventListener('DOMContentLoaded', function() {
+  // Criar container da neve
+  const snowContainer = document.createElement('div');
+  snowContainer.className = 'snow-container';
+  snowContainer.id = 'snowContainer';
+  document.body.appendChild(snowContainer);
+
+  // Função para criar flocos de neve
+  function createSnowflake() {
+    const snowflake = document.createElement('div');
+    snowflake.className = 'snowflake';
+    snowflake.innerHTML = '❄';
+    snowflake.style.left = Math.random() * 100 + 'vw';
+    snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+    snowflake.style.opacity = Math.random() * 0.6 + 0.4;
+    snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+    
+    snowContainer.appendChild(snowflake);
+    
+    // Remove o floco após a animação
+    setTimeout(() => {
+      if (snowflake.parentNode) {
+        snowflake.parentNode.removeChild(snowflake);
+      }
+    }, 5000);
+  }
+
+  // Função para congelar elementos aleatórios
+  function freezeRandomElement() {
+    const elements = document.querySelectorAll('.stat-card, .action-btn, .btn, .card, .ag-action-btn, .nav-link, .menu-item, button, a');
+    if (elements.length === 0) return;
+    
+    const randomElement = elements[Math.floor(Math.random() * elements.length)];
+    
+    if (!randomElement.classList.contains('frozen')) {
+      randomElement.classList.add('frozen');
+      
+      // Adiciona efeito de rachadura no gelo
+      const iceCrack = document.createElement('div');
+      iceCrack.className = 'ice-crack';
+      randomElement.appendChild(iceCrack);
+      
+      // Remove o gelo após alguns segundos
+      setTimeout(() => {
+        if (randomElement.classList.contains('frozen')) {
+          randomElement.classList.remove('frozen');
+          if (iceCrack.parentNode) {
+            iceCrack.parentNode.removeChild(iceCrack);
+          }
+        }
+      }, 10000);
+    }
+  }
+
+  // Função para quebrar o gelo
+  function breakIce(element) {
+    const iceCrack = element.querySelector('.ice-crack');
+    if (iceCrack) {
+      iceCrack.classList.add('breaking');
+      setTimeout(() => {
+        element.classList.remove('frozen');
+        if (iceCrack.parentNode) {
+          iceCrack.parentNode.removeChild(iceCrack);
+        }
+      }, 500);
+    }
+  }
+
+  // Event listener para quebrar o gelo ao clicar
+  document.addEventListener('click', function(e) {
+    const frozenElement = e.target.closest('.frozen');
+    if (frozenElement) {
+      breakIce(frozenElement);
+    }
+  });
+
+  // Iniciar neve
+  setInterval(createSnowflake, 100);
+  
+  // Iniciar congelamento
+  setInterval(freezeRandomElement, 5000);
+});
+// NEVE NATALINA - snow.js
+document.addEventListener('DOMContentLoaded', function() {
+  // Criar container da neve
+  const snowContainer = document.createElement('div');
+  snowContainer.className = 'snow-container';
+  snowContainer.id = 'snowContainer';
+  document.body.appendChild(snowContainer);
+
+  // Função para criar flocos de neve
+  function createSnowflake() {
+    const snowflake = document.createElement('div');
+    snowflake.className = 'snowflake';
+    snowflake.innerHTML = '❄';
+    snowflake.style.left = Math.random() * 100 + 'vw';
+    snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+    snowflake.style.opacity = Math.random() * 0.6 + 0.4;
+    snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+    
+    snowContainer.appendChild(snowflake);
+    
+    // Remove o floco após a animação
+    setTimeout(() => {
+      if (snowflake.parentNode) {
+        snowflake.parentNode.removeChild(snowflake);
+      }
+    }, 5000);
+  }
+
+  // Função para congelar elementos aleatórios
+  function freezeRandomElement() {
+    const elements = document.querySelectorAll('.stat-card, .action-btn, .btn, .card, .ag-action-btn, .nav-link, .menu-item, button, a');
+    if (elements.length === 0) return;
+    
+    const randomElement = elements[Math.floor(Math.random() * elements.length)];
+    
+    if (!randomElement.classList.contains('frozen')) {
+      randomElement.classList.add('frozen');
+      
+      // Adiciona efeito de rachadura no gelo
+      const iceCrack = document.createElement('div');
+      iceCrack.className = 'ice-crack';
+      randomElement.appendChild(iceCrack);
+      
+      // Remove o gelo após alguns segundos
+      setTimeout(() => {
+        if (randomElement.classList.contains('frozen')) {
+          randomElement.classList.remove('frozen');
+          if (iceCrack.parentNode) {
+            iceCrack.parentNode.removeChild(iceCrack);
+          }
+        }
+      }, 10000);
+    }
+  }
+
+  // Função para quebrar o gelo
+  function breakIce(element) {
+    const iceCrack = element.querySelector('.ice-crack');
+    if (iceCrack) {
+      iceCrack.classList.add('breaking');
+      setTimeout(() => {
+        element.classList.remove('frozen');
+        if (iceCrack.parentNode) {
+          iceCrack.parentNode.removeChild(iceCrack);
+        }
+      }, 500);
+    }
+  }
+
+  // Event listener para quebrar o gelo ao clicar
+  document.addEventListener('click', function(e) {
+    const frozenElement = e.target.closest('.frozen');
+    if (frozenElement) {
+      breakIce(frozenElement);
+    }
+  });
+
+  // Iniciar neve
+  setInterval(createSnowflake, 100);
+  
+  // Iniciar congelamento
+  setInterval(freezeRandomElement, 5000);
+});
+</script>
+</body>
+</html>

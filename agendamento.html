@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agendamentos - Sistema Completo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="header.css">
+  <script src="header.js"></script>
+  <style>
+    /* ========================
+       VARIÁVEIS DE TEMA
+    ======================== */
+    :root {
+      --bg-color: #f4f4f4;
+      --text-color: #333;
+      --card-bg: #fff;
+      --primary-color: #007bff;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --info-color: #17a2b8;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+    }
+    
+    [data-theme="dark"] {
+      --bg-color: #1a1a1a;
+      --text-color: #ffffff;
+      --card-bg: #2d2d2d;
+      --primary-color: #0d6efd;
+      --secondary-color: #6c757d;
+      --success-color: #198754;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --info-color: #0dcaf0;
+      --shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    
+    /* ========================
+       ESTILOS GERAIS
+    ======================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+
+    .section {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    h1 {
+      color: var(--text-color);
+      font-size: 2rem;
+    }
+
+    /* ========================
+       BOTÕES
+    ======================== */
+    .btn {
+      padding: 0.875rem 1.25rem;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-success {
+      background-color: var(--success-color);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background-color: #218838;
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #c82333;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background-color: #5a6268;
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+    }
+
+    .btn-warning {
+      background-color: var(--warning-color);
+      color: black;
+    }
+
+    .btn-warning:hover {
+      background-color: #e0a800;
+      transform: translateY(-2px);
+    }
+
+    .btn-info {
+      background-color: var(--info-color);
+      color: white;
+    }
+
+    .btn-info:hover {
+      background-color: #138496;
+      transform: translateY(-2px);
+    }
+
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+
+    /* ========================
+       FILTROS
+    ======================== */
+    .filtros-container {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .filtros-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .filtros-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .filtros-toggle {
+      background: none;
+      border: none;
+      color: var(--primary-color);
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .filtros-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .filtros-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+    }
+
+    .filtro-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filtro-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+    }
+
+    /* ========================
+       ESTATÍSTICAS
+    ======================== */
+    .agendamentos-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      text-align: center;
+      box-shadow: var(--shadow);
+      border-left: 5px solid;
+      transition: var(--transition);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-card.primary { border-left-color: var(--primary-color); }
+    .stat-card.success { border-left-color: var(--success-color); }
+    .stat-card.warning { border-left-color: var(--warning-color); }
+    .stat-card.danger { border-left-color: var(--danger-color); }
+
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--text-color);
+    }
+
+    .stat-label {
+      color: var(--secondary-color);
+      margin-top: 0.5rem;
+    }
+
+    /* ========================
+       FORMULÁRIOS
+    ======================== */
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: var(--border-radius);
+      border: 2px solid #ddd;
+      font-size: 1rem;
+      background: var(--card-bg);
+      color: var(--text-color);
+      transition: var(--transition);
+    }
+
+    [data-theme="dark"] .form-control {
+      border-color: #555;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    /* ========================
+       TABELA
+    ======================== */
+    .table-responsive {
+      overflow-x: auto;
+      margin-top: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+
+    .table th, .table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      transition: var(--transition);
+    }
+
+    [data-theme="dark"] .table th,
+    [data-theme="dark"] .table td {
+      border-bottom: 1px solid #555;
+    }
+
+    .table th {
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+    }
+
+    .table tbody tr:hover {
+      background-color: rgba(0,0,0,0.03);
+    }
+
+    [data-theme="dark"] .table tbody tr:hover {
+      background-color: rgba(255,255,255,0.05);
+    }
+
+    /* ========================
+       MODAL
+    ======================== */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      width: 100%;
+      max-width: 600px;
+      position: relative;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-color);
+      transition: var(--transition);
+    }
+
+    .modal-close:hover {
+      color: var(--danger-color);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
+    }
+
+    /* ========================
+       STATUS BADGES
+    ======================== */
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-block;
+      text-align: center;
+      min-width: 100px;
+    }
+
+    .status-pendente {
+      background-color: var(--warning-color);
+      color: black;
+    }
+
+    .status-confirmado {
+      background-color: var(--info-color);
+      color: white;
+    }
+
+    .status-realizado {
+      background-color: var(--success-color);
+      color: white;
+    }
+
+    .status-cancelado {
+      background-color: var(--danger-color);
+      color: white;
+    }
+
+    /* ========================
+       FOOTER
+    ======================== */
+    .footer {
+      background: var(--card-bg);
+      padding: 2rem 0 1rem;
+      text-align: center;
+      margin-top: auto;
+      width: 100%;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+      transition: var(--transition);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        text-align: left;
+      }
+    }
+
+    .footer-brand {
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-brand {
+        text-align: left;
+      }
+    }
+
+    .footer-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-nav {
+        justify-content: flex-start;
+      }
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-social {
+        justify-content: flex-end;
+      }
+    }
+
+    .footer-nav a,
+    .footer-social a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-weight: 500;
+    }
+
+    .footer-nav a:hover,
+    .footer-social a:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+
+    .footer-copy {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #ddd;
+      color: var(--secondary-color);
+    }
+
+    [data-theme="dark"] .footer-copy {
+      border-top-color: #555;
+    }
+
+    /* ========================
+       PRELOADER
+    ======================== */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+/* NEVE NATALINA - snow.css */
+.snow-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.snowflake {
+  position: absolute;
+  top: -10px;
+  color: #e0f7fa;
+  font-size: 1em;
+  user-select: none;
+  pointer-events: none;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+  }
+}
+
+.frozen {
+  position: relative;
+  overflow: hidden;
+}
+
+.frozen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(173, 216, 230, 0.3);
+  border: 2px solid #b3e0ff;
+  border-radius: 12px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.frozen::after {
+  content: '❄️';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 1.2rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ice-crack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 30% 30%, transparent 10px, rgba(255,255,255,0.8) 11px, transparent 12px),
+    radial-gradient(circle at 70% 70%, transparent 8px, rgba(255,255,255,0.8) 9px, transparent 10px),
+    radial-gradient(circle at 50% 20%, transparent 6px, rgba(255,255,255,0.8) 7px, transparent 8px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.breaking {
+  animation: breakIce 0.5s ease forwards;
+}
+
+@keyframes breakIce {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}
+    #preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .preloader-logo {
+      font-size: clamp(1.5rem, 8vw, 2.5rem);
+      font-weight: 700;
+      color: var(--primary-color);
+      animation: pulse 1.2s infinite ease-in-out;
+      margin-bottom: 1rem;
+    }
+
+    .preloader-text {
+      color: var(--secondary-color);
+      font-size: clamp(0.9rem, 3vw, 1rem);
+      text-align: center;
+    }
+
+    @keyframes pulse {
+      0%, 100% { 
+        opacity: 0.7; 
+        transform: scale(1); 
+      }
+      50% { 
+        opacity: 1; 
+        transform: scale(1.05); 
+      }
+    }
+
+    /* ========================
+       RESPONSIVIDADE
+    ======================== */
+    @media (max-width: 768px) {
+      .container {
+        width: 95%;
+        padding: 1rem 0;
+      }
+      
+      .section {
+        padding: 1.5rem;
+      }
+      
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .agendamentos-stats {
+        grid-template-columns: 1fr;
+      }
+      
+      .filtros-content {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Preloader -->
+<div id="preloader">
+  <div class="preloader-logo">Agendamento</div>
+  <div class="preloader-text">Carregando dados...</div>
+</div>
+
+<main class="container">
+  <section class="section">
+    <div class="page-header">
+      <h1>Gerenciar Agendamentos</h1>
+      <button id="btnNovoAgendamento" class="btn btn-success">
+        <i class="fas fa-plus"></i> Novo Agendamento
+      </button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filtros-container">
+      <div class="filtros-header">
+        <button class="filtros-toggle" id="toggleFiltros">
+          <i class="fas fa-filter"></i> Filtros
+        </button>
+      </div>
+      
+      <div class="filtros-content" id="filtrosContent">
+        <div class="filtro-group">
+          <label class="filtro-label">Status</label>
+          <select id="filtroStatus" class="form-control">
+            <option value="">Todos os status</option>
+            <option value="pendente">Pendente</option>
+            <option value="confirmado">Confirmado</option>
+            <option value="realizado">Realizado</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+        </div>
+        
+        <div class="filtro-group">
+          <label class="filtro-label">Data Início</label>
+          <input type="date" id="filtroDataInicio" class="form-control">
+        </div>
+        
+        <div class="filtro-group">
+          <label class="filtro-label">Data Fim</label>
+          <input type="date" id="filtroDataFim" class="form-control">
+        </div>
+        
+        <div class="filtro-group">
+          <label class="filtro-label">Cliente</label>
+          <select id="filtroCliente" class="form-control">
+            <option value="">Todos os clientes</option>
+          </select>
+        </div>
+        
+        <div class="filtro-group">
+          <label class="filtro-label">Serviço</label>
+          <select id="filtroServico" class="form-control">
+            <option value="">Todos os serviços</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="filtros-actions">
+        <button class="btn btn-primary btn-sm" id="btnAplicarFiltros">
+          <i class="fas fa-search"></i> Aplicar Filtros
+        </button>
+        <button class="btn btn-secondary btn-sm" id="btnLimparFiltros">
+          <i class="fas fa-times"></i> Limpar Filtros
+        </button>
+      </div>
+    </div>
+
+    <div class="agendamentos-stats">
+      <div class="stat-card primary">
+        <h3 class="stat-value" id="totalAgendamentos">0</h3>
+        <p class="stat-label">Total de Agendamentos</p>
+      </div>
+      <div class="stat-card success">
+        <h3 class="stat-value" id="agendamentosHoje">0</h3>
+        <p class="stat-label">Agendamentos Hoje</p>
+      </div>
+      <div class="stat-card warning">
+        <h3 class="stat-value" id="agendamentosFuturos">0</h3>
+        <p class="stat-label">Agendamentos Futuros</p>
+      </div>
+      <div class="stat-card danger">
+        <h3 class="stat-value" id="agendamentosPassados">0</h3>
+        <p class="stat-label">Agendamentos Passados</p>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table" id="tabelaAgendamentos">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Serviço</th>
+            <th>Data</th>
+            <th>Hora</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaAgendamentosBody">
+          <!-- Linhas serão geradas pelo JavaScript -->
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<!-- Modal de Agendamento -->
+<div class="modal" id="modalAgendamento">
+  <div class="modal-content">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <h2 id="modalTitulo">Novo Agendamento</h2>
+    <form id="formAgendamento">
+      <div class="form-group">
+        <label for="editCliente" class="form-label">Cliente *</label>
+        <select id="editCliente" class="form-control" required>
+          <option value="">Selecione um cliente</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="editServico" class="form-label">Serviço *</label>
+        <select id="editServico" class="form-control" required>
+          <option value="">Selecione um serviço</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="editData" class="form-label">Data *</label>
+        <input type="date" id="editData" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="editHora" class="form-label">Hora *</label>
+        <input type="time" id="editHora" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="editStatus" class="form-label">Status *</label>
+        <select id="editStatus" class="form-control" required>
+          <option value="pendente">Pendente</option>
+          <option value="confirmado">Confirmado</option>
+          <option value="realizado">Realizado</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success">
+          <i class="fas fa-save"></i> Salvar Agendamento
+        </button>
+        <button type="button" class="btn btn-secondary" id="btnCancelar">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de Edição de Status -->
+<div class="modal" id="modalStatus">
+  <div class="modal-content">
+    <button class="modal-close" id="modalStatusClose">&times;</button>
+    <h2>Alterar Status do Agendamento</h2>
+    <form id="formStatus">
+      <div class="form-group">
+        <label for="statusAgendamento" class="form-label">Novo Status *</label>
+        <select id="statusAgendamento" class="form-control" required>
+          <option value="pendente">Pendente</option>
+          <option value="confirmado">Confirmado</option>
+          <option value="realizado">Realizado</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success">
+          <i class="fas fa-save"></i> Atualizar Status
+        </button>
+        <button type="button" class="btn btn-secondary" id="btnCancelarStatus">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container footer-content">
+    <div class="footer-brand">
+      <a href="#" class="logo">Agendamento+</a>
+      <p>Sistema de Agendamento Online</p>
+    </div>
+    <nav class="footer-nav">
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="serviços.html" class="nav-link">Serviços</a>
+      <a href="agendamento.html" class="nav-link">Agendamentos</a>
+      <a href="clientes.html" class="nav-link">Clientes</a>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+    </nav>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/pauloryantomaz/" target="_blank" class="footer-link">
+         Instagram
+      </a>
+      <a href="https://wa.me/5561985825956" target="_blank" class="footer-link">
+         WhatsApp
+      </a>
+    </div>
+  </div>
+  <div class="footer-copy">
+    <p>&copy; 2025 Agendamento+. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<script>
+// =====================
+// GERENCIAMENTO DE AGENDAMENTOS
+// =====================
+let agendamentoEditando = null;
+let agendamentoStatusEditando = null;
+let clientes = [];
+let servicos = [];
+let todosAgendamentos = [];
+let filtrosAtivos = {
+  status: '',
+  dataInicio: '',
+  dataFim: '',
+  cliente: '',
+  servico: ''
+};
+
+// Dados de exemplo para demonstração
+const dadosExemplo = {
+  agendamentos: [
+    {
+      id: 1,
+      cliente_id: 1,
+      cliente_nome: "João Silva",
+      cliente_telefone: "(11) 99999-9999",
+      servico_id: 1,
+      servico_nome: "Corte de Cabelo",
+      data_agendamento: "2025-03-20",
+      hora_agendamento: "09:00",
+      status: "pendente"
+    },
+    {
+      id: 2,
+      cliente_id: 2,
+      cliente_nome: "Maria Santos",
+      cliente_telefone: "(11) 88888-8888",
+      servico_id: 2,
+      servico_nome: "Manicure",
+      data_agendamento: "2025-03-21",
+      hora_agendamento: "14:30",
+      status: "confirmado"
+    },
+    {
+      id: 3,
+      cliente_id: 3,
+      cliente_nome: "Pedro Oliveira",
+      cliente_telefone: "(11) 77777-7777",
+      servico_id: 3,
+      servico_nome: "Barba",
+      data_agendamento: "2025-03-19",
+      hora_agendamento: "10:15",
+      status: "realizado"
+    },
+    {
+      id: 4,
+      cliente_id: 1,
+      cliente_nome: "João Silva",
+      cliente_telefone: "(11) 99999-9999",
+      servico_id: 1,
+      servico_nome: "Corte de Cabelo",
+      data_agendamento: "2025-03-25",
+      hora_agendamento: "16:00",
+      status: "cancelado"
+    }
+  ],
+  clientes: [
+    { id: 1, nome: "João Silva", telefone: "(11) 99999-9999" },
+    { id: 2, nome: "Maria Santos", telefone: "(11) 88888-8888" },
+    { id: 3, nome: "Pedro Oliveira", telefone: "(11) 77777-7777" },
+    { id: 4, nome: "Ana Costa", telefone: "(11) 66666-6666" }
+  ],
+  servicos: [
+    { id: 1, nome: "Corte de Cabelo", valor: 30.00 },
+    { id: 2, nome: "Manicure", valor: 25.00 },
+    { id: 3, nome: "Barba", valor: 20.00 },
+    { id: 4, nome: "Pedicure", valor: 30.00 }
+  ]
+};
+
+// Carregar dados iniciais
+document.addEventListener('DOMContentLoaded', function() {
+  carregarAgendamentos();
+  carregarClientes();
+  carregarServicos();
+  
+  // Event listeners para os filtros
+  document.getElementById('toggleFiltros').addEventListener('click', toggleFiltros);
+  document.getElementById('btnAplicarFiltros').addEventListener('click', aplicarFiltros);
+  document.getElementById('btnLimparFiltros').addEventListener('click', limparFiltros);
+  
+  // Event listeners para mudanças nos filtros (filtro automático)
+  document.getElementById('filtroStatus').addEventListener('change', aplicarFiltros);
+  document.getElementById('filtroDataInicio').addEventListener('change', aplicarFiltros);
+  document.getElementById('filtroDataFim').addEventListener('change', aplicarFiltros);
+  document.getElementById('filtroCliente').addEventListener('change', aplicarFiltros);
+  document.getElementById('filtroServico').addEventListener('change', aplicarFiltros);
+  
+  document.getElementById('btnNovoAgendamento').addEventListener('click', abrirModalNovo);
+  document.getElementById('formAgendamento').addEventListener('submit', salvarAgendamento);
+  document.getElementById('btnCancelar').addEventListener('click', fecharModalAgendamento);
+  document.getElementById('modalClose').addEventListener('click', fecharModalAgendamento);
+  
+  document.getElementById('formStatus').addEventListener('submit', atualizarStatus);
+  document.getElementById('btnCancelarStatus').addEventListener('click', fecharModalStatus);
+  document.getElementById('modalStatusClose').addEventListener('click', fecharModalStatus);
+  
+  // Fechar modal clicando fora
+  document.getElementById('modalAgendamento').addEventListener('click', function(e) {
+    if (e.target === this) fecharModalAgendamento();
+  });
+  
+  document.getElementById('modalStatus').addEventListener('click', function(e) {
+    if (e.target === this) fecharModalStatus();
+  });
+});
+
+function toggleFiltros() {
+  const filtrosContent = document.getElementById('filtrosContent');
+  const toggleBtn = document.getElementById('toggleFiltros');
+  
+  if (filtrosContent.style.display === 'none') {
+    filtrosContent.style.display = 'grid';
+    toggleBtn.innerHTML = '<i class="fas fa-filter"></i> Ocultar Filtros';
+  } else {
+    filtrosContent.style.display = 'none';
+    toggleBtn.innerHTML = '<i class="fas fa-filter"></i> Mostrar Filtros';
+  }
+}
+
+function aplicarFiltros() {
+  filtrosAtivos = {
+    status: document.getElementById('filtroStatus').value,
+    dataInicio: document.getElementById('filtroDataInicio').value,
+    dataFim: document.getElementById('filtroDataFim').value,
+    cliente: document.getElementById('filtroCliente').value,
+    servico: document.getElementById('filtroServico').value
+  };
+  
+  filtrarAgendamentos();
+}
+
+function limparFiltros() {
+  document.getElementById('filtroStatus').value = '';
+  document.getElementById('filtroDataInicio').value = '';
+  document.getElementById('filtroDataFim').value = '';
+  document.getElementById('filtroCliente').value = '';
+  document.getElementById('filtroServico').value = '';
+  
+  filtrosAtivos = {
+    status: '',
+    dataInicio: '',
+    dataFim: '',
+    cliente: '',
+    servico: ''
+  };
+  
+  filtrarAgendamentos();
+}
+
+function filtrarAgendamentos() {
+  let agendamentosFiltrados = [...todosAgendamentos];
+  
+  // Filtrar por status
+  if (filtrosAtivos.status) {
+    agendamentosFiltrados = agendamentosFiltrados.filter(a => a.status === filtrosAtivos.status);
+  }
+  
+  // Filtrar por data início
+  if (filtrosAtivos.dataInicio) {
+    agendamentosFiltrados = agendamentosFiltrados.filter(a => a.data_agendamento >= filtrosAtivos.dataInicio);
+  }
+  
+  // Filtrar por data fim
+  if (filtrosAtivos.dataFim) {
+    agendamentosFiltrados = agendamentosFiltrados.filter(a => a.data_agendamento <= filtrosAtivos.dataFim);
+  }
+  
+  // Filtrar por cliente
+  if (filtrosAtivos.cliente) {
+    agendamentosFiltrados = agendamentosFiltrados.filter(a => a.cliente_id == filtrosAtivos.cliente);
+  }
+  
+  // Filtrar por serviço
+  if (filtrosAtivos.servico) {
+    agendamentosFiltrados = agendamentosFiltrados.filter(a => a.servico_id == filtrosAtivos.servico);
+  }
+  
+  atualizarTabela(agendamentosFiltrados);
+  atualizarEstatisticas(agendamentosFiltrados);
+}
+
+function carregarAgendamentos() {
+  // Simulação de API - usando dados de exemplo
+  setTimeout(() => {
+    todosAgendamentos = dadosExemplo.agendamentos;
+    filtrarAgendamentos();
+  }, 1000);
+}
+
+function carregarClientes() {
+  // Simulação de API - usando dados de exemplo
+  setTimeout(() => {
+    clientes = dadosExemplo.clientes;
+    
+    // Preencher select do modal
+    const selectEdit = document.getElementById('editCliente');
+    selectEdit.innerHTML = '<option value="">Selecione um cliente</option>';
+    
+    // Preencher select do filtro
+    const selectFiltro = document.getElementById('filtroCliente');
+    selectFiltro.innerHTML = '<option value="">Todos os clientes</option>';
+    
+    clientes.forEach(cliente => {
+      const option = new Option(cliente.nome, cliente.id);
+      const optionFiltro = new Option(cliente.nome, cliente.id);
+      selectEdit.add(option);
+      selectFiltro.add(optionFiltro);
+    });
+  }, 500);
+}
+
+function carregarServicos() {
+  // Simulação de API - usando dados de exemplo
+  setTimeout(() => {
+    servicos = dadosExemplo.servicos;
+    
+    // Preencher select do modal
+    const selectEdit = document.getElementById('editServico');
+    selectEdit.innerHTML = '<option value="">Selecione um serviço</option>';
+    
+    // Preencher select do filtro
+    const selectFiltro = document.getElementById('filtroServico');
+    selectFiltro.innerHTML = '<option value="">Todos os serviços</option>';
+    
+    servicos.forEach(servico => {
+      const option = new Option(`${servico.nome} - R$ ${parseFloat(servico.valor).toFixed(2)}`, servico.id);
+      const optionFiltro = new Option(servico.nome, servico.id);
+      selectEdit.add(option);
+      selectFiltro.add(optionFiltro);
+    });
+  }, 500);
+}
+
+function atualizarEstatisticas(agendamentos) {
+  const hoje = new Date().toISOString().split('T')[0];
+  
+  const totalAgendamentos = agendamentos.length;
+  const agendamentosHoje = agendamentos.filter(a => a.data_agendamento === hoje).length;
+  const agendamentosFuturos = agendamentos.filter(a => a.data_agendamento > hoje).length;
+  const agendamentosPassados = agendamentos.filter(a => a.data_agendamento < hoje).length;
+  
+  document.getElementById('totalAgendamentos').textContent = totalAgendamentos;
+  document.getElementById('agendamentosHoje').textContent = agendamentosHoje;
+  document.getElementById('agendamentosFuturos').textContent = agendamentosFuturos;
+  document.getElementById('agendamentosPassados').textContent = agendamentosPassados;
+}
+
+function atualizarTabela(agendamentos) {
+  const tbody = document.getElementById('tabelaAgendamentosBody');
+  tbody.innerHTML = '';
+
+  if (agendamentos.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Nenhum agendamento encontrado</td></tr>';
+    return;
+  }
+
+  // Ordenar por data (mais recentes primeiro)
+  agendamentos.sort((a, b) => {
+    const dataA = new Date(a.data_agendamento + 'T' + a.hora_agendamento);
+    const dataB = new Date(b.data_agendamento + 'T' + b.hora_agendamento);
+    return dataB - dataA;
+  });
+
+  agendamentos.forEach(agendamento => {
+    const tr = document.createElement('tr');
+    const status = agendamento.status || 'pendente';
+    const statusClass = `status-${status}`;
+    
+    // Botão de ligação
+    const botaoLigacao = agendamento.cliente_telefone ? 
+      `<button class="btn btn-info btn-sm" onclick="fazerLigacao('${agendamento.cliente_telefone}')">
+        <i class="fas fa-phone"></i> Ligar
+      </button>` : 
+      '<span class="btn btn-secondary btn-sm disabled"><i class="fas fa-phone"></i> Sem telefone</span>';
+    
+    tr.innerHTML = `
+      <td>${agendamento.cliente_nome || 'Cliente não encontrado'}</td>
+      <td>${agendamento.servico_nome || 'Serviço não encontrado'}</td>
+      <td>${formatarData(agendamento.data_agendamento)}</td>
+      <td>${agendamento.hora_agendamento}</td>
+      <td>
+        <span class="status-badge ${statusClass}">
+          ${status.charAt(0).toUpperCase() + status.slice(1)}
+        </span>
+      </td>
+      <td>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          ${botaoLigacao}
+          <button class="btn btn-primary btn-sm" onclick="abrirModalStatus(${agendamento.id})">
+            <i class="fas fa-edit"></i> Status
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="excluirAgendamento(${agendamento.id})">
+            <i class="fas fa-trash"></i> Excluir
+          </button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function formatarData(data) {
+  const [ano, mes, dia] = data.split('-');
+  return `${dia}/${mes}/${ano}`;
+}
+
+function fazerLigacao(telefone) {
+  // Remove caracteres não numéricos
+  const numeroLimpo = telefone.replace(/\D/g, '');
+  
+  if (numeroLimpo) {
+    // Abre o link de telefone (funciona em dispositivos móveis)
+    window.open(`tel:${numeroLimpo}`, '_self');
+    
+    // Para desktop, mostra um alerta
+    if (!/Mobi|Android/i.test(navigator.userAgent)) {
+      alert(`Ligação para: ${telefone}\n\nEm um dispositivo móvel, esta ação iniciaria uma chamada telefônica.`);
+    }
+  } else {
+    alert('Número de telefone inválido');
+  }
+}
+
+function abrirModalNovo() {
+  agendamentoEditando = null;
+  document.getElementById('modalTitulo').textContent = 'Novo Agendamento';
+  document.getElementById('formAgendamento').reset();
+  
+  // Definir data mínima como hoje
+  const hoje = new Date().toISOString().split('T')[0];
+  document.getElementById('editData').min = hoje;
+  
+  document.getElementById('modalAgendamento').style.display = 'flex';
+}
+
+function fecharModalAgendamento() {
+  document.getElementById('modalAgendamento').style.display = 'none';
+  agendamentoEditando = null;
+}
+
+function abrirModalStatus(agendamentoId) {
+  agendamentoStatusEditando = agendamentoId;
+  document.getElementById('modalStatus').style.display = 'flex';
+}
+
+function fecharModalStatus() {
+  document.getElementById('modalStatus').style.display = 'none';
+  agendamentoStatusEditando = null;
+}
+
+function salvarAgendamento(e) {
+  e.preventDefault();
+  
+  const dados = {
+    cliente_id: parseInt(document.getElementById('editCliente').value),
+    servico_id: parseInt(document.getElementById('editServico').value),
+    data_agendamento: document.getElementById('editData').value,
+    hora_agendamento: document.getElementById('editHora').value,
+    status: document.getElementById('editStatus').value
+  };
+
+  // Validar dados
+  if (!dados.cliente_id || !dados.servico_id || !dados.data_agendamento || !dados.hora_agendamento || !dados.status) {
+    alert('Todos os campos são obrigatórios');
+    return;
+  }
+
+  // Validar se a data não é no passado
+  const dataAgendamento = new Date(dados.data_agendamento + 'T' + dados.hora_agendamento);
+  const agora = new Date();
+  if (dataAgendamento < agora) {
+    alert('Não é possível agendar para datas/horários no passado');
+    return;
+  }
+
+  // Simulação de API
+  alert('Agendamento salvo com sucesso!');
+  fecharModalAgendamento();
+  // Recarregar os agendamentos
+  carregarAgendamentos();
+}
+
+function atualizarStatus(e) {
+  e.preventDefault();
+  
+  const novoStatus = document.getElementById('statusAgendamento').value;
+  
+  if (!agendamentoStatusEditando) {
+    alert('Erro: ID do agendamento não encontrado');
+    return;
+  }
+
+  // Simulação de API
+  alert(`Status do agendamento atualizado para: ${novoStatus}`);
+  fecharModalStatus();
+  // Recarregar os agendamentos
+  carregarAgendamentos();
+}
+
+function excluirAgendamento(id) {
+  if (confirm('Tem certeza que deseja excluir este agendamento?')) {
+    // Simulação de API
+    alert('Agendamento excluído com sucesso!');
+    // Recarregar os agendamentos
+    carregarAgendamentos();
+  }
+}
+
+// Preloader
+window.addEventListener('load', () => {
+  const preloader = document.getElementById('preloader');
+  const minLoadTime = 1500;
+  const loadStart = Date.now();
+  
+  setTimeout(() => {
+    const loadTime = Date.now() - loadStart;
+    const remainingTime = Math.max(3000 - loadTime, 0);
+    
+    setTimeout(() => {
+      preloader.classList.add('hidden');
+      setTimeout(() => preloader.remove(), 300);
+    }, remainingTime);
+  }, minLoadTime);
+});
+function carregarAgendamentos() {
+    fetch('/api/agendamentos')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao carregar agendamentos');
+            }
+            return response.json();
+        })
+        .then(agendamentos => {
+            todosAgendamentos = agendamentos;
+            filtrarAgendamentos();
+        })
+        .catch(error => {
+            console.error('Erro ao carregar agendamentos:', error);
+            document.getElementById('tabelaAgendamentosBody').innerHTML = 
+                '<tr><td colspan="6" style="text-align: center;">Erro ao carregar agendamentos</td></tr>';
+        });
+}
+
+function carregarClientes() {
+    fetch('/api/clientes')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao carregar clientes');
+            }
+            return response.json();
+        })
+        .then(data => {
+            clientes = data;
+            
+            // Preencher select do modal
+            const selectEdit = document.getElementById('editCliente');
+            selectEdit.innerHTML = '<option value="">Selecione um cliente</option>';
+            
+            // Preencher select do filtro
+            const selectFiltro = document.getElementById('filtroCliente');
+            selectFiltro.innerHTML = '<option value="">Todos os clientes</option>';
+            
+            clientes.forEach(cliente => {
+                const option = new Option(cliente.nome, cliente.id);
+                const optionFiltro = new Option(cliente.nome, cliente.id);
+                selectEdit.add(option);
+                selectFiltro.add(optionFiltro);
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao carregar clientes:', error);
+            alert('Erro ao carregar lista de clientes');
+        });
+}
+
+function carregarServicos() {
+    fetch('/api/servicos')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao carregar serviços');
+            }
+            return response.json();
+        })
+        .then(data => {
+            servicos = data;
+            
+            // Preencher select do modal
+            const selectEdit = document.getElementById('editServico');
+            selectEdit.innerHTML = '<option value="">Selecione um serviço</option>';
+            
+            // Preencher select do filtro
+            const selectFiltro = document.getElementById('filtroServico');
+            selectFiltro.innerHTML = '<option value="">Todos os serviços</option>';
+            
+            servicos.forEach(servico => {
+                const option = new Option(servico.nome, servico.id);
+                const optionFiltro = new Option(servico.nome, servico.id);
+                selectEdit.add(option);
+                selectFiltro.add(optionFiltro);
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao carregar serviços:', error);
+            alert('Erro ao carregar lista de serviços');
+        });
+}
+// NEVE NATALINA - snow.js
+document.addEventListener('DOMContentLoaded', function() {
+  // Criar container da neve
+  const snowContainer = document.createElement('div');
+  snowContainer.className = 'snow-container';
+  snowContainer.id = 'snowContainer';
+  document.body.appendChild(snowContainer);
+
+  // Função para criar flocos de neve
+  function createSnowflake() {
+    const snowflake = document.createElement('div');
+    snowflake.className = 'snowflake';
+    snowflake.innerHTML = '❄';
+    snowflake.style.left = Math.random() * 100 + 'vw';
+    snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+    snowflake.style.opacity = Math.random() * 0.6 + 0.4;
+    snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+    
+    snowContainer.appendChild(snowflake);
+    
+    // Remove o floco após a animação
+    setTimeout(() => {
+      if (snowflake.parentNode) {
+        snowflake.parentNode.removeChild(snowflake);
+      }
+    }, 5000);
+  }
+
+  // Função para congelar elementos aleatórios
+  function freezeRandomElement() {
+    const elements = document.querySelectorAll('.stat-card, .action-btn, .btn, .card, .ag-action-btn, .nav-link, .menu-item, button, a');
+    if (elements.length === 0) return;
+    
+    const randomElement = elements[Math.floor(Math.random() * elements.length)];
+    
+    if (!randomElement.classList.contains('frozen')) {
+      randomElement.classList.add('frozen');
+      
+      // Adiciona efeito de rachadura no gelo
+      const iceCrack = document.createElement('div');
+      iceCrack.className = 'ice-crack';
+      randomElement.appendChild(iceCrack);
+      
+      // Remove o gelo após alguns segundos
+      setTimeout(() => {
+        if (randomElement.classList.contains('frozen')) {
+          randomElement.classList.remove('frozen');
+          if (iceCrack.parentNode) {
+            iceCrack.parentNode.removeChild(iceCrack);
+          }
+        }
+      }, 10000);
+    }
+  }
+
+  // Função para quebrar o gelo
+  function breakIce(element) {
+    const iceCrack = element.querySelector('.ice-crack');
+    if (iceCrack) {
+      iceCrack.classList.add('breaking');
+      setTimeout(() => {
+        element.classList.remove('frozen');
+        if (iceCrack.parentNode) {
+          iceCrack.parentNode.removeChild(iceCrack);
+        }
+      }, 500);
+    }
+  }
+
+  // Event listener para quebrar o gelo ao clicar
+  document.addEventListener('click', function(e) {
+    const frozenElement = e.target.closest('.frozen');
+    if (frozenElement) {
+      breakIce(frozenElement);
+    }
+  });
+
+  // Iniciar neve
+  setInterval(createSnowflake, 100);
+  
+  // Iniciar congelamento
+  setInterval(freezeRandomElement, 5000);
+});
+</script>
+</body>
+</html>

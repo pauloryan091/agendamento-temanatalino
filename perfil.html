@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil - Agendamento+</title>
+  
+  <!-- Meta tags para PWA e responsividade -->
+  <meta name="theme-color" content="#007bff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#007bff">
+  <meta name="msapplication-navbutton-color" content="#007bff">
+  
+  <!-- CSS do Header -->
+  <link rel="stylesheet" href="header.css">
+  
+  <style>
+    /* ========================
+       TEMA CLARO/ESCURO - OTIMIZADO
+    ======================== */
+    :root {
+      --bg-color: #f4f4f4;
+      --text-color: #333;
+      --card-bg: #fff;
+      --primary-color: #007bff;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --info-color: #17a2b8;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+    }
+    
+    [data-theme="dark"] {
+      --bg-color: #1e1e1e;
+      --text-color: #f4f4f4;
+      --card-bg: #2a2a2a;
+      --primary-color: #0d6efd;
+      --secondary-color: #5a6268;
+      --success-color: #218838;
+      --warning-color: #e0a800;
+      --danger-color: #c82333;
+      --info-color: #138496;
+      --shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    /* ========================
+       RESET E BASE RESPONSIVA
+    ======================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      transition: var(--transition);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* ========================
+       MAIN CONTENT RESPONSIVO
+    ======================== */
+    .main-content {
+      flex: 1;
+      padding: 2rem 0;
+    }
+
+    .section {
+      background: var(--card-bg);
+      padding: clamp(1.5rem, 4vw, 2rem);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      color: var(--text-color);
+      font-weight: 700;
+    }
+
+    /* ========================
+       PERFIL INFO
+    ======================== */
+    .profile-info {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .profile-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    [data-theme="dark"] .profile-item {
+      border-bottom-color: #444;
+    }
+
+    .profile-label {
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .profile-value {
+      color: var(--secondary-color);
+    }
+
+    /* ========================
+       BOTÕES
+    ======================== */
+    .btn {
+      padding: clamp(0.875rem, 2.5vw, 1rem) clamp(1rem, 3vw, 1.25rem);
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+
+    .btn-success {
+      background-color: var(--success-color);
+      color: white;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      opacity: 0.9;
+    }
+
+    .actions-section {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #ddd;
+    }
+
+    [data-theme="dark"] .actions-section {
+      border-top-color: #444;
+    }
+
+    .actions-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 480px) {
+      .actions-buttons {
+        flex-direction: column;
+      }
+      
+      .actions-buttons .btn {
+        width: 100%;
+      }
+    }
+
+    /* ========================
+       FOOTER RESPONSIVO
+    ======================== */
+    .footer {
+      background: var(--card-bg);
+      padding: 2rem 0 1rem;
+      text-align: center;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      margin-top: auto;
+      width: 100%;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        text-align: left;
+      }
+    }
+
+    .footer-brand {
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-brand {
+        text-align: left;
+      }
+    }
+
+    .footer-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-nav {
+        justify-content: flex-start;
+      }
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-social {
+        justify-content: flex-end;
+      }
+    }
+
+    .footer-nav a,
+    .footer-social a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-weight: 500;
+    }
+
+    .footer-nav a:hover,
+    .footer-social a:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+
+    .footer-copy {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #ddd;
+      color: var(--secondary-color);
+    }
+
+    [data-theme="dark"] .footer-copy {
+      border-top-color: #444;
+    }
+
+    /* ========================
+       PRELOADER OTIMIZADO
+    ======================== */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    #preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .preloader-logo {
+      font-size: clamp(1.5rem, 8vw, 2.5rem);
+      font-weight: 700;
+      color: var(--primary-color);
+      animation: pulse 1.2s infinite ease-in-out;
+      margin-bottom: 1rem;
+    }
+
+    .preloader-text {
+      color: var(--secondary-color);
+      font-size: clamp(0.9rem, 3vw, 1rem);
+      text-align: center;
+    }
+
+    @keyframes pulse {
+      0%, 100% { 
+        opacity: 0.7; 
+        transform: scale(1); 
+      }
+      50% { 
+        opacity: 1; 
+        transform: scale(1.05); 
+      }
+    }
+    /* NEVE NATALINA - snow.css */
+.snow-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.snowflake {
+  position: absolute;
+  top: -10px;
+  color: #e0f7fa;
+  font-size: 1em;
+  user-select: none;
+  pointer-events: none;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+  }
+}
+
+.frozen {
+  position: relative;
+  overflow: hidden;
+}
+
+.frozen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(173, 216, 230, 0.3);
+  border: 2px solid #b3e0ff;
+  border-radius: 12px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.frozen::after {
+  content: '❄️';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 1.2rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ice-crack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 30% 30%, transparent 10px, rgba(255,255,255,0.8) 11px, transparent 12px),
+    radial-gradient(circle at 70% 70%, transparent 8px, rgba(255,255,255,0.8) 9px, transparent 10px),
+    radial-gradient(circle at 50% 20%, transparent 6px, rgba(255,255,255,0.8) 7px, transparent 8px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.breaking {
+  animation: breakIce 0.5s ease forwards;
+}
+
+@keyframes breakIce {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}
+  </style>
+</head>
+<body>
+
+<!-- Preloader -->
+<div id="preloader">
+  <div class="preloader-logo">Perfil</div>
+  <div class="preloader-text">Carregando perfil...</div>
+</div>
+
+<!-- Header será inserido automaticamente aqui -->
+
+<main class="main-content container">
+  <section class="section">
+    <h1 class="section-title">Meu Perfil</h1>
+    
+    <div class="profile-info">
+      <div class="profile-item">
+        <span class="profile-label">Nome:</span>
+        <span class="profile-value" id="profileNome">Carregando...</span>
+      </div>
+      
+      <div class="profile-item">
+        <span class="profile-label">Email:</span>
+        <span class="profile-value" id="profileEmail">Carregando...</span>
+      </div>
+      
+      <div class="actions-section">
+        <div class="actions-buttons">
+          <button class="btn btn-primary" onclick="irParaConfiguracoes()">
+             Configurações
+          </button>
+          <button class="btn btn-secondary" onclick="voltar()">
+             Voltar
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container footer-content">
+    <div class="footer-brand">
+      <a href="#" class="logo">Agendamento+</a>
+      <p>Sistema de Agendamento Online</p>
+    </div>
+   <nav class="footer-nav">
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="serviços.html" class="nav-link">Serviços</a>
+      <a href="agendamento.html" class="nav-link">Agendamentos</a>
+      <a href="clientes.html" class="nav-link">Clientes</a>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+    </nav>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/pauloryantomaz/" target="_blank" class="footer-link">Instagram</a>
+      <a href="https://wa.me/5561985825956" target="_blank" class="footer-link">WhatsApp</a>
+    </div>
+  </div>
+  <div class="footer-copy">
+    <p>&copy; 2025 Agendamento+. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<script src="header.js"></script>
+<script>
+// PERFIL DO USUÁRIO
+document.addEventListener('DOMContentLoaded', () => {
+  
+  function carregarPerfil() {
+    fetch('/api/usuario')
+      .then(response => response.json())
+      .then(usuario => {
+        document.getElementById('profileNome').textContent = usuario.nome;
+        document.getElementById('profileEmail').textContent = usuario.email;
+      })
+      .catch(error => {
+        console.error('Erro ao carregar perfil:', error);
+        document.getElementById('profileNome').textContent = 'Erro ao carregar';
+        document.getElementById('profileEmail').textContent = 'Erro ao carregar';
+      });
+  }
+
+  window.irParaConfiguracoes = () => {
+    window.location.href = 'configuracoes.html';
+  };
+
+  window.voltar = () => {
+    window.location.href = 'dashboard.html';
+  };
+
+  // =====================
+  // INICIALIZAÇÃO
+  // =====================
+  
+  // Preloader
+  window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    const minLoadTime = 1500;
+    const loadStart = Date.now();
+    
+    setTimeout(() => {
+      const loadTime = Date.now() - loadStart;
+      const remainingTime = Math.max(3000 - loadTime, 0);
+      
+      setTimeout(() => {
+        preloader.classList.add('hidden');
+        setTimeout(() => preloader.remove(), 300);
+      }, remainingTime);
+    }, minLoadTime);
+  });
+
+  // Carregar perfil ao iniciar
+  carregarPerfil();
+});
+// NEVE NATALINA - snow.js
+document.addEventListener('DOMContentLoaded', function() {
+  // Criar container da neve
+  const snowContainer = document.createElement('div');
+  snowContainer.className = 'snow-container';
+  snowContainer.id = 'snowContainer';
+  document.body.appendChild(snowContainer);
+
+  // Função para criar flocos de neve
+  function createSnowflake() {
+    const snowflake = document.createElement('div');
+    snowflake.className = 'snowflake';
+    snowflake.innerHTML = '❄';
+    snowflake.style.left = Math.random() * 100 + 'vw';
+    snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+    snowflake.style.opacity = Math.random() * 0.6 + 0.4;
+    snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+    
+    snowContainer.appendChild(snowflake);
+    
+    // Remove o floco após a animação
+    setTimeout(() => {
+      if (snowflake.parentNode) {
+        snowflake.parentNode.removeChild(snowflake);
+      }
+    }, 5000);
+  }
+
+  // Função para congelar elementos aleatórios
+  function freezeRandomElement() {
+    const elements = document.querySelectorAll('.stat-card, .action-btn, .btn, .card, .ag-action-btn, .nav-link, .menu-item, button, a');
+    if (elements.length === 0) return;
+    
+    const randomElement = elements[Math.floor(Math.random() * elements.length)];
+    
+    if (!randomElement.classList.contains('frozen')) {
+      randomElement.classList.add('frozen');
+      
+      // Adiciona efeito de rachadura no gelo
+      const iceCrack = document.createElement('div');
+      iceCrack.className = 'ice-crack';
+      randomElement.appendChild(iceCrack);
+      
+      // Remove o gelo após alguns segundos
+      setTimeout(() => {
+        if (randomElement.classList.contains('frozen')) {
+          randomElement.classList.remove('frozen');
+          if (iceCrack.parentNode) {
+            iceCrack.parentNode.removeChild(iceCrack);
+          }
+        }
+      }, 10000);
+    }
+  }
+
+  // Função para quebrar o gelo
+  function breakIce(element) {
+    const iceCrack = element.querySelector('.ice-crack');
+    if (iceCrack) {
+      iceCrack.classList.add('breaking');
+      setTimeout(() => {
+        element.classList.remove('frozen');
+        if (iceCrack.parentNode) {
+          iceCrack.parentNode.removeChild(iceCrack);
+        }
+      }, 500);
+    }
+  }
+
+  // Event listener para quebrar o gelo ao clicar
+  document.addEventListener('click', function(e) {
+    const frozenElement = e.target.closest('.frozen');
+    if (frozenElement) {
+      breakIce(frozenElement);
+    }
+  });
+
+  // Iniciar neve
+  setInterval(createSnowflake, 100);
+  
+  // Iniciar congelamento
+  setInterval(freezeRandomElement, 5000);
+});
+</script>
+</body>
+</html>

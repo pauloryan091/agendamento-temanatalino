@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clientes - Agendamento+</title>
+  
+  <!-- Meta tags para PWA e responsividade -->
+  <meta name="theme-color" content="#007bff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#007bff">
+  <meta name="msapplication-navbutton-color" content="#007bff">
+  
+  <!-- CSS do Header -->
+  <link rel="stylesheet" href="header.css">
+  
+  <style>
+    /* ========================
+       TEMA CLARO/ESCURO - OTIMIZADO
+    ======================== */
+    :root {
+      --bg-color: #f4f4f4;
+      --text-color: #333;
+      --card-bg: #fff;
+      --primary-color: #007bff;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --info-color: #17a2b8;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+    }
+    
+    [data-theme="dark"] {
+      --bg-color: #1e1e1e;
+      --text-color: #f4f4f4;
+      --card-bg: #2a2a2a;
+      --primary-color: #0d6efd;
+      --secondary-color: #5a6268;
+      --success-color: #218838;
+      --warning-color: #e0a800;
+      --danger-color: #c82333;
+      --info-color: #138496;
+      --shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    /* ========================
+       RESET E BASE RESPONSIVA
+    ======================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      transition: var(--transition);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* ========================
+       MAIN CONTENT RESPONSIVO
+    ======================== */
+    .main-content {
+      flex: 1;
+      padding: 2rem 0;
+    }
+
+    .section {
+      background: var(--card-bg);
+      padding: clamp(1.5rem, 4vw, 2rem);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      color: var(--text-color);
+      font-weight: 700;
+    }
+
+    /* ========================
+       PAGE HEADER
+    ======================== */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    /* ========================
+       FILTROS
+    ======================== */
+    .filtros-container {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .filtros-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .filtros-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .filtros-toggle {
+      background: none;
+      border: none;
+      color: var(--primary-color);
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .filtros-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .filtros-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+    }
+
+    .filtro-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filtro-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+    }
+
+    /* ========================
+       BOTÕES
+    ======================== */
+    .btn {
+      padding: clamp(0.875rem, 2.5vw, 1rem) clamp(1rem, 3vw, 1.25rem);
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-success {
+      background-color: var(--success-color);
+      color: white;
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+
+    .btn-warning {
+      background-color: var(--warning-color);
+      color: black;
+    }
+
+    .btn-info {
+      background-color: var(--info-color);
+      color: white;
+    }
+
+    .btn-sm {
+      padding: clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem);
+      font-size: clamp(0.75rem, 2vw, 0.875rem);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      opacity: 0.9;
+    }
+
+    /* ========================
+       MODAL
+    ======================== */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: clamp(1rem, 3vw, 1.5rem);
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      padding: clamp(1.5rem, 4vw, 2rem);
+      border-radius: var(--border-radius);
+      width: 100%;
+      max-width: min(500px, 95vw);
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: clamp(0.75rem, 2vw, 1rem);
+      right: clamp(0.75rem, 2vw, 1rem);
+      background: none;
+      border: none;
+      font-size: clamp(1.25rem, 4vw, 1.5rem);
+      cursor: pointer;
+      color: var(--text-color);
+      padding: 0.25rem;
+    }
+
+    .form-group {
+      margin-bottom: clamp(1rem, 3vw, 1.25rem);
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: clamp(0.5rem, 1.5vw, 0.75rem);
+      font-weight: 600;
+      color: var(--text-color);
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: clamp(0.75rem, 2vw, 1rem);
+      border-radius: var(--border-radius);
+      border: 2px solid #ddd;
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
+      background: var(--card-bg);
+      color: var(--text-color);
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: clamp(0.5rem, 1.5vw, 0.75rem);
+      justify-content: flex-end;
+      margin-top: clamp(1.5rem, 4vw, 2rem);
+      flex-wrap: wrap;
+    }
+
+    /* ========================
+       TABELA RESPONSIVA
+    ======================== */
+    .table-responsive {
+      overflow-x: auto;
+      margin-top: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+
+    .table th, .table td {
+      padding: clamp(0.75rem, 2vw, 1rem);
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+    }
+
+    [data-theme="dark"] .table th,
+    [data-theme="dark"] .table td {
+      border-bottom-color: #444;
+    }
+
+    .table th {
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      white-space: nowrap;
+    }
+
+    .table-striped tbody tr:nth-child(even) {
+      background-color: rgba(0,0,0,0.03);
+    }
+
+    [data-theme="dark"] .table-striped tbody tr:nth-child(even) {
+      background-color: rgba(255,255,255,0.05);
+    }
+
+    .table tbody tr:hover {
+      background-color: rgba(0,123,255,0.08);
+    }
+
+    /* ========================
+       FOOTER RESPONSIVO
+    ======================== */
+    .footer {
+      background: var(--card-bg);
+      padding: 2rem 0 1rem;
+      text-align: center;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      margin-top: auto;
+      width: 100%;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        text-align: left;
+      }
+    }
+
+    .footer-brand {
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-brand {
+        text-align: left;
+      }
+    }
+
+    .footer-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-nav {
+        justify-content: flex-start;
+      }
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-social {
+        justify-content: flex-end;
+      }
+    }
+
+    .footer-nav a,
+    .footer-social a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-weight: 500;
+    }
+/* NEVE NATALINA - snow.css */
+.snow-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.snowflake {
+  position: absolute;
+  top: -10px;
+  color: #e0f7fa;
+  font-size: 1em;
+  user-select: none;
+  pointer-events: none;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+  }
+}
+
+.frozen {
+  position: relative;
+  overflow: hidden;
+}
+
+.frozen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(173, 216, 230, 0.3);
+  border: 2px solid #b3e0ff;
+  border-radius: 12px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.frozen::after {
+  content: '❄️';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 1.2rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ice-crack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 30% 30%, transparent 10px, rgba(255,255,255,0.8) 11px, transparent 12px),
+    radial-gradient(circle at 70% 70%, transparent 8px, rgba(255,255,255,0.8) 9px, transparent 10px),
+    radial-gradient(circle at 50% 20%, transparent 6px, rgba(255,255,255,0.8) 7px, transparent 8px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.breaking {
+  animation: breakIce 0.5s ease forwards;
+}
+
+@keyframes breakIce {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}
+    .footer-nav a:hover,
+    .footer-social a:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+
+    .footer-copy {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #ddd;
+      color: var(--secondary-color);
+    }
+
+    [data-theme="dark"] .footer-copy {
+      border-top-color: #444;
+    }
+
+    /* ========================
+       PRELOADER OTIMIZADO
+    ======================== */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    #preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .preloader-logo {
+      font-size: clamp(1.5rem, 8vw, 2.5rem);
+      font-weight: 700;
+      color: var(--primary-color);
+      animation: pulse 1.2s infinite ease-in-out;
+      margin-bottom: 1rem;
+    }
+
+    .preloader-text {
+      color: var(--secondary-color);
+      font-size: clamp(0.9rem, 3vw, 1rem);
+      text-align: center;
+    }
+
+    @keyframes pulse {
+      0%, 100% { 
+        opacity: 0.7; 
+        transform: scale(1); 
+      }
+      50% { 
+        opacity: 1; 
+        transform: scale(1.05); 
+      }
+    }
+
+    /* ========================
+       MENSAGEM DE VAZIO
+    ======================== */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--secondary-color);
+    }
+
+    .empty-state h3 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    /* ========================
+       RESPONSIVIDADE
+    ======================== */
+    @media (max-width: 768px) {
+      .filtros-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .table-responsive {
+        margin-top: 1rem;
+      }
+      
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+    
+  </style>
+</head>
+<body>
+
+<!-- Preloader -->
+<div id="preloader">
+  <div class="preloader-logo">Clientes</div>
+  <div class="preloader-text">Carregando clientes...</div>
+</div>
+
+<!-- Header será inserido automaticamente aqui -->
+
+<main class="main-content container">
+  <section class="section">
+    <div class="page-header">
+      <h1 class="section-title">Gerenciar Clientes</h1>
+      <button id="btnAddCliente" class="btn btn-success">
+        <i class="fas fa-plus"></i> Adicionar Cliente
+      </button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filtros-container">
+      <div class="filtros-header">
+        <h3 class="filtros-title">Filtros</h3>
+        <button class="filtros-toggle" id="toggleFiltros">
+          <i class="fas fa-filter"></i> Filtros
+        </button>
+      </div>
+      
+      <div class="filtros-content" id="filtrosContent">
+        <div class="filtro-group">
+          <label class="filtro-label">Buscar por Nome</label>
+          <input type="text" id="filtroNome" class="form-control" placeholder="Digite o nome do cliente">
+        </div>
+        
+        <div class="filtro-group">
+          <label class="filtro-label">Buscar por Telefone</label>
+          <input type="text" id="filtroTelefone" class="form-control" placeholder="Digite o telefone">
+        </div>
+        
+        <div class="filtro-group">
+          <label class="filtro-label">Buscar por Email</label>
+          <input type="text" id="filtroEmail" class="form-control" placeholder="Digite o email">
+        </div>
+      </div>
+      
+      <div class="filtros-actions">
+        <button class="btn btn-primary btn-sm" id="btnAplicarFiltros">
+          <i class="fas fa-search"></i> Aplicar Filtros
+        </button>
+        <button class="btn btn-secondary btn-sm" id="btnLimparFiltros">
+          <i class="fas fa-times"></i> Limpar Filtros
+        </button>
+      </div>
+    </div>
+    
+    <div class="table-responsive">
+      <table class="table table-striped" id="tabelaClientes">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>Email</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaClientesBody">
+          <!-- Clientes serão carregados dinamicamente -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="emptyState" class="empty-state" style="display: none;">
+      <h3>Nenhum cliente encontrado</h3>
+      <p>Tente ajustar os filtros ou adicionar um novo cliente</p>
+    </div>
+  </section>
+</main>
+
+<!-- Modal para Adicionar/Editar Cliente -->
+<div class="modal" id="modalCliente">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModalCliente()">&times;</button>
+    <h2 id="modalTitulo">Adicionar Novo Cliente</h2>
+    <form id="formCliente">
+      <input type="hidden" id="clienteId">
+      <div class="form-group">
+        <label for="nomeCliente" class="form-label">Nome Completo *</label>
+        <input type="text" id="nomeCliente" class="form-control" placeholder="Ex: João Silva" required>
+      </div>
+      <div class="form-group">
+        <label for="telefoneCliente" class="form-label">Telefone</label>
+        <input type="tel" id="telefoneCliente" class="form-control" placeholder="(11) 99999-9999">
+      </div>
+      <div class="form-group">
+        <label for="emailCliente" class="form-label">Email</label>
+        <input type="email" id="emailCliente" class="form-control" placeholder="exemplo@email.com">
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success">
+          <i class="fas fa-save"></i> Salvar Cliente
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="closeModalCliente()">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container footer-content">
+    <div class="footer-brand">
+      <a href="#" class="logo">Agendamento+</a>
+      <p>Sistema de Agendamento Online</p>
+    </div>
+    <nav class="footer-nav">
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="serviços.html" class="nav-link">Serviços</a>
+      <a href="agendamento.html" class="nav-link">Agendamentos</a>
+      <a href="clientes.html" class="nav-link">Clientes</a>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+    </nav>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/pauloryantomaz/" target="_blank" class="footer-link">Instagram</a>
+      <a href="https://wa.me/5561985825956" target="_blank" class="footer-link">WhatsApp</a>
+    </div>
+  </div>
+  <div class="footer-copy">
+    <p>&copy; 2025 Agendamento+. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<script src="header.js"></script>
+<script>
+// GERENCIAMENTO DE CLIENTES COM BANCO DE DADOS FLASK
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('modalCliente');
+  const form = document.getElementById('formCliente');
+  const tabelaBody = document.getElementById('tabelaClientesBody');
+  const emptyState = document.getElementById('emptyState');
+  const btnAddCliente = document.getElementById('btnAddCliente');
+
+  let todosClientes = [];
+  let clienteEditando = null;
+  let filtrosAtivos = {
+    nome: '',
+    telefone: '',
+    email: ''
+  };
+
+  // =====================
+  // FILTROS
+  // =====================
+  function toggleFiltros() {
+    const filtrosContent = document.getElementById('filtrosContent');
+    const toggleBtn = document.getElementById('toggleFiltros');
+    
+    if (filtrosContent.style.display === 'none') {
+      filtrosContent.style.display = 'grid';
+      toggleBtn.innerHTML = '<i class="fas fa-filter"></i> Ocultar Filtros';
+    } else {
+      filtrosContent.style.display = 'none';
+      toggleBtn.innerHTML = '<i class="fas fa-filter"></i> Mostrar Filtros';
+    }
+  }
+
+  function aplicarFiltros() {
+    filtrosAtivos = {
+      nome: document.getElementById('filtroNome').value.toLowerCase(),
+      telefone: document.getElementById('filtroTelefone').value.toLowerCase(),
+      email: document.getElementById('filtroEmail').value.toLowerCase()
+    };
+    
+    filtrarClientes();
+  }
+
+  function limparFiltros() {
+    document.getElementById('filtroNome').value = '';
+    document.getElementById('filtroTelefone').value = '';
+    document.getElementById('filtroEmail').value = '';
+    
+    filtrosAtivos = {
+      nome: '',
+      telefone: '',
+      email: ''
+    };
+    
+    filtrarClientes();
+  }
+
+  function filtrarClientes() {
+    let clientesFiltrados = [...todosClientes];
+    
+    // Filtrar por nome
+    if (filtrosAtivos.nome) {
+      clientesFiltrados = clientesFiltrados.filter(cliente => 
+        cliente.nome.toLowerCase().includes(filtrosAtivos.nome)
+      );
+    }
+    
+    // Filtrar por telefone
+    if (filtrosAtivos.telefone) {
+      clientesFiltrados = clientesFiltrados.filter(cliente => 
+        cliente.telefone && cliente.telefone.toLowerCase().includes(filtrosAtivos.telefone)
+      );
+    }
+    
+    // Filtrar por email
+    if (filtrosAtivos.email) {
+      clientesFiltrados = clientesFiltrados.filter(cliente => 
+        cliente.email && cliente.email.toLowerCase().includes(filtrosAtivos.email)
+      );
+    }
+    
+    atualizarTabela(clientesFiltrados);
+  }
+
+  // =====================
+  // MODAL DE CLIENTES
+  // =====================
+  btnAddCliente.addEventListener('click', () => { 
+    abrirModalNovoCliente();
+  });
+
+  window.abrirModalNovoCliente = () => {
+    clienteEditando = null;
+    modal.style.display = 'flex'; 
+    document.getElementById('modalTitulo').textContent = 'Adicionar Novo Cliente';
+    document.getElementById('clienteId').value = '';
+    form.reset();
+  }
+
+  window.editarCliente = (clienteId) => {
+    const cliente = todosClientes.find(c => c.id === clienteId);
+    if (cliente) {
+      clienteEditando = clienteId;
+      modal.style.display = 'flex';
+      document.getElementById('modalTitulo').textContent = 'Editar Cliente';
+      document.getElementById('clienteId').value = cliente.id;
+      document.getElementById('nomeCliente').value = cliente.nome;
+      document.getElementById('telefoneCliente').value = cliente.telefone || '';
+      document.getElementById('emailCliente').value = cliente.email || '';
+    }
+  }
+
+  window.closeModalCliente = () => { 
+    modal.style.display = 'none'; 
+    form.reset();
+    clienteEditando = null;
+  }
+
+  // Fecha modal clicando fora do conteúdo
+  modal.addEventListener('click', e => { 
+    if (e.target === modal) closeModalCliente(); 
+  });
+
+  // Fecha modal com ESC
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      if (modal.style.display === 'flex') closeModalCliente();
+    }
+  });
+
+  // =====================
+  // CARREGAR CLIENTES DO BANCO
+  // =====================
+  function carregarClientes() {
+    fetch('/api/clientes')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erro ao carregar clientes');
+        }
+        return response.json();
+      })
+      .then(clientes => {
+        todosClientes = clientes;
+        filtrarClientes();
+      })
+      .catch(error => {
+        console.error('Erro ao carregar clientes:', error);
+        emptyState.style.display = 'block';
+        emptyState.innerHTML = `
+          <h3>Erro ao carregar clientes</h3>
+          <p>Tente recarregar a página</p>
+        `;
+      });
+  }
+
+  function atualizarTabela(clientes) {
+    tabelaBody.innerHTML = '';
+    
+    if (clientes.length === 0) {
+      emptyState.style.display = 'block';
+      return;
+    }
+    
+    emptyState.style.display = 'none';
+    
+    // Ordenar clientes por nome
+    clientes.sort((a, b) => a.nome.localeCompare(b.nome));
+    
+    clientes.forEach(cliente => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${cliente.nome}</td>
+        <td>${cliente.telefone || '-'}</td>
+        <td>${cliente.email || '-'}</td>
+        <td>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-sm" onclick="editarCliente(${cliente.id})">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="excluirCliente(${cliente.id})">
+              <i class="fas fa-trash"></i> Excluir
+            </button>
+          </div>
+        </td>
+      `;
+      tabelaBody.appendChild(tr);
+    });
+  }
+
+  // =====================
+  // GERENCIAMENTO DE CLIENTES
+  // =====================
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    
+    const clienteId = document.getElementById('clienteId').value;
+    const nome = document.getElementById('nomeCliente').value.trim();
+    const telefone = document.getElementById('telefoneCliente').value.trim();
+    const email = document.getElementById('emailCliente').value.trim();
+    
+    if (!nome) {
+      alert('Nome é obrigatório');
+      return;
+    }
+    
+    // Validação básica de email
+    if (email && !isValidEmail(email)) {
+      alert('Por favor, insira um email válido');
+      return;
+    }
+    
+    // Validação básica de telefone (apenas verifica se tem pelo menos 10 caracteres)
+    if (telefone && telefone.replace(/\D/g, '').length < 10) {
+      alert('Por favor, insira um telefone válido com DDD');
+      return;
+    }
+    
+    const dadosCliente = {
+      nome: nome,
+      telefone: telefone,
+      email: email
+    };
+
+    let url = '/api/clientes';
+    let method = 'POST';
+
+    // Se está editando, muda para PUT
+    if (clienteId) {
+      url = `/api/clientes/${clienteId}`;
+      method = 'PUT';
+    }
+    
+    fetch(url, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dadosCliente)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert(data.message);
+        closeModalCliente();
+        carregarClientes();
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Erro:', error);
+      alert('Erro ao salvar cliente');
+    });
+  });
+
+  // Função auxiliar para validar email
+  function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  window.excluirCliente = (clienteId) => {
+    if (confirm('Tem certeza que deseja excluir este cliente?')) {
+      fetch(`/api/clientes/${clienteId}`, {
+        method: 'DELETE'
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert(data.message);
+          carregarClientes();
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Erro:', error);
+        alert('Erro ao excluir cliente');
+      });
+    }
+  };
+
+  // =====================
+  // INICIALIZAÇÃO
+  // =====================
+  
+  // Event listeners para os filtros
+  document.getElementById('toggleFiltros').addEventListener('click', toggleFiltros);
+  document.getElementById('btnAplicarFiltros').addEventListener('click', aplicarFiltros);
+  document.getElementById('btnLimparFiltros').addEventListener('click', limparFiltros);
+
+  // Preloader
+  window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    const minLoadTime = 1500;
+    const loadStart = Date.now();
+    
+    setTimeout(() => {
+      const loadTime = Date.now() - loadStart;
+      const remainingTime = Math.max(3000 - loadTime, 0);
+      
+      setTimeout(() => {
+        preloader.classList.add('hidden');
+        setTimeout(() => preloader.remove(), 300);
+      }, remainingTime);
+    }, minLoadTime);
+  });
+
+  // Carregar clientes ao iniciar
+  carregarClientes();
+});
+// NEVE NATALINA - snow.js
+document.addEventListener('DOMContentLoaded', function() {
+  // Criar container da neve
+  const snowContainer = document.createElement('div');
+  snowContainer.className = 'snow-container';
+  snowContainer.id = 'snowContainer';
+  document.body.appendChild(snowContainer);
+
+  // Função para criar flocos de neve
+  function createSnowflake() {
+    const snowflake = document.createElement('div');
+    snowflake.className = 'snowflake';
+    snowflake.innerHTML = '❄';
+    snowflake.style.left = Math.random() * 100 + 'vw';
+    snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+    snowflake.style.opacity = Math.random() * 0.6 + 0.4;
+    snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+    
+    snowContainer.appendChild(snowflake);
+    
+    // Remove o floco após a animação
+    setTimeout(() => {
+      if (snowflake.parentNode) {
+        snowflake.parentNode.removeChild(snowflake);
+      }
+    }, 5000);
+  }
+
+  // Função para congelar elementos aleatórios
+  function freezeRandomElement() {
+    const elements = document.querySelectorAll('.stat-card, .action-btn, .btn, .card, .ag-action-btn, .nav-link, .menu-item, button, a');
+    if (elements.length === 0) return;
+    
+    const randomElement = elements[Math.floor(Math.random() * elements.length)];
+    
+    if (!randomElement.classList.contains('frozen')) {
+      randomElement.classList.add('frozen');
+      
+      // Adiciona efeito de rachadura no gelo
+      const iceCrack = document.createElement('div');
+      iceCrack.className = 'ice-crack';
+      randomElement.appendChild(iceCrack);
+      
+      // Remove o gelo após alguns segundos
+      setTimeout(() => {
+        if (randomElement.classList.contains('frozen')) {
+          randomElement.classList.remove('frozen');
+          if (iceCrack.parentNode) {
+            iceCrack.parentNode.removeChild(iceCrack);
+          }
+        }
+      }, 10000);
+    }
+  }
+
+  // Função para quebrar o gelo
+  function breakIce(element) {
+    const iceCrack = element.querySelector('.ice-crack');
+    if (iceCrack) {
+      iceCrack.classList.add('breaking');
+      setTimeout(() => {
+        element.classList.remove('frozen');
+        if (iceCrack.parentNode) {
+          iceCrack.parentNode.removeChild(iceCrack);
+        }
+      }, 500);
+    }
+  }
+
+  // Event listener para quebrar o gelo ao clicar
+  document.addEventListener('click', function(e) {
+    const frozenElement = e.target.closest('.frozen');
+    if (frozenElement) {
+      breakIce(frozenElement);
+    }
+  });
+
+  // Iniciar neve
+  setInterval(createSnowflake, 100);
+  
+  // Iniciar congelamento
+  setInterval(freezeRandomElement, 5000);
+});
+</script>
+</body>
+</html>

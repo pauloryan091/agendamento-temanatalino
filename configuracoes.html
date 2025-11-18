@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurações - Agendamento+</title>
+  
+  <!-- Meta tags para PWA e responsividade -->
+  <meta name="theme-color" content="#007bff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#007bff">
+  <meta name="msapplication-navbutton-color" content="#007bff">
+  
+  <!-- CSS do Header -->
+  <link rel="stylesheet" href="header.css">
+  
+  <style>
+    /* ========================
+       TEMA CLARO/ESCURO - OTIMIZADO
+    ======================== */
+    :root {
+      --bg-color: #f4f4f4;
+      --text-color: #333;
+      --card-bg: #fff;
+      --primary-color: #007bff;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --info-color: #17a2b8;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+    }
+    
+    [data-theme="dark"] {
+      --bg-color: #1e1e1e;
+      --text-color: #f4f4f4;
+      --card-bg: #2a2a2a;
+      --primary-color: #0d6efd;
+      --secondary-color: #5a6268;
+      --success-color: #218838;
+      --warning-color: #e0a800;
+      --danger-color: #c82333;
+      --info-color: #138496;
+      --shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    /* ========================
+       RESET E BASE RESPONSIVA
+    ======================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      transition: var(--transition);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* ========================
+       MAIN CONTENT RESPONSIVO
+    ======================== */
+    .main-content {
+      flex: 1;
+      padding: 2rem 0;
+    }
+
+    .section {
+      background: var(--card-bg);
+      padding: clamp(1.5rem, 4vw, 2rem);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      color: var(--text-color);
+      font-weight: 700;
+    }
+
+    /* ========================
+       CONFIGURAÇÕES GRID
+    ======================== */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .setting-card {
+      background: var(--card-bg);
+      padding: clamp(1.25rem, 3vw, 1.5rem);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      border-left: 5px solid var(--primary-color);
+      transition: transform 0.3s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .setting-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .setting-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .setting-icon {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      color: var(--primary-color);
+      width: 3rem;
+      text-align: center;
+    }
+
+    .setting-title {
+      font-size: clamp(1.125rem, 3vw, 1.3rem);
+      font-weight: 700;
+      margin: 0;
+      color: var(--text-color);
+    }
+
+    .setting-description {
+      color: var(--secondary-color);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+      font-size: clamp(0.875rem, 2.5vw, 0.95rem);
+      flex: 1;
+    }
+
+    /* ========================
+       SWITCH PERSONALIZADO
+    ======================== */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary-color);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    /* ========================
+       BOTÕES
+    ======================== */
+    .btn {
+      padding: clamp(0.875rem, 2.5vw, 1rem) clamp(1rem, 3vw, 1.25rem);
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: clamp(0.875rem, 2.5vw, 1rem);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 50px;
+    }
+
+    .btn-primary { background-color: var(--primary-color); color: white; }
+    .btn-success { background-color: var(--success-color); color: white; }
+    .btn-secondary { background-color: var(--secondary-color); color: white; }
+    .btn-info { background-color: var(--info-color); color: white; }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      opacity: 0.9;
+    }
+
+    /* ========================
+       STATUS DO SISTEMA
+    ======================== */
+    .system-status {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .status-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .status-online {
+      background-color: var(--success-color);
+    }
+
+    .status-offline {
+      background-color: var(--danger-color);
+    }
+
+    .status-text {
+      font-weight: 600;
+    }
+
+    .version-info {
+      background: rgba(0,123,255,0.1);
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      margin-top: 1rem;
+    }
+
+    .version-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .version-label {
+      color: var(--secondary-color);
+      font-weight: 600;
+    }
+
+    .version-value {
+      color: var(--text-color);
+    }
+
+    /* ========================
+       FOOTER RESPONSIVO
+    ======================== */
+    .footer {
+      background: var(--card-bg);
+      padding: 2rem 0 1rem;
+      text-align: center;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      margin-top: auto;
+      width: 100%;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        text-align: left;
+      }
+    }
+
+    .footer-brand {
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-brand {
+        text-align: left;
+      }
+    }
+
+    .footer-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-nav {
+        justify-content: flex-start;
+      }
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-social {
+        justify-content: flex-end;
+      }
+    }
+
+    .footer-nav a,
+    .footer-social a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-weight: 500;
+    }
+
+    .footer-nav a:hover,
+    .footer-social a:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+
+    .footer-copy {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #ddd;
+      color: var(--secondary-color);
+    }
+
+    [data-theme="dark"] .footer-copy {
+      border-top-color: #444;
+    }
+
+    /* ========================
+       PRELOADER OTIMIZADO
+    ======================== */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    #preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .preloader-logo {
+      font-size: clamp(1.5rem, 8vw, 2.5rem);
+      font-weight: 700;
+      color: var(--primary-color);
+      animation: pulse 1.2s infinite ease-in-out;
+      margin-bottom: 1rem;
+    }
+
+    .preloader-text {
+      color: var(--secondary-color);
+      font-size: clamp(0.9rem, 3vw, 1rem);
+      text-align: center;
+    }
+
+    @keyframes pulse {
+      0%, 100% { 
+        opacity: 0.7; 
+        transform: scale(1); 
+      }
+      50% { 
+        opacity: 1; 
+        transform: scale(1.05); 
+      }
+    }
+
+    /* ========================
+       BREAKPOINTS ESPECÍFICOS
+    ======================== */
+    
+    /* Mobile Small (até 360px) */
+    @media (max-width: 360px) {
+      .container {
+        width: 95%;
+        padding: 0 0.5rem;
+      }
+      
+      .section {
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+      }
+      
+      .settings-grid {
+        gap: 1rem;
+      }
+      
+      .setting-card {
+        padding: 1rem;
+      }
+    }
+
+    /* Mobile (até 480px) */
+    @media (max-width: 480px) {
+      .settings-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Tablet (768px a 1024px) */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .settings-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* ========================
+       ACESSIBILIDADE
+    ======================== */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Foco visível para acessibilidade */
+    .btn:focus-visible,
+    .switch:focus-visible {
+      outline: 3px solid var(--primary-color);
+      outline-offset: 2px;
+    }
+    /* NEVE NATALINA - snow.css */
+.snow-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.snowflake {
+  position: absolute;
+  top: -10px;
+  color: #e0f7fa;
+  font-size: 1em;
+  user-select: none;
+  pointer-events: none;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+  }
+}
+
+.frozen {
+  position: relative;
+  overflow: hidden;
+}
+
+.frozen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(173, 216, 230, 0.3);
+  border: 2px solid #b3e0ff;
+  border-radius: 12px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.frozen::after {
+  content: '❄️';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 1.2rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ice-crack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 30% 30%, transparent 10px, rgba(255,255,255,0.8) 11px, transparent 12px),
+    radial-gradient(circle at 70% 70%, transparent 8px, rgba(255,255,255,0.8) 9px, transparent 10px),
+    radial-gradient(circle at 50% 20%, transparent 6px, rgba(255,255,255,0.8) 7px, transparent 8px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.breaking {
+  animation: breakIce 0.5s ease forwards;
+}
+
+@keyframes breakIce {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}
+  </style>
+</head>
+<body>
+
+<!-- Preloader -->
+<div id="preloader">
+  <div class="preloader-logo">Configurações</div>
+  <div class="preloader-text">Carregando configurações...</div>
+</div>
+
+<!-- Header será inserido automaticamente aqui -->
+
+<main class="main-content container">
+  <section class="section">
+    <h1 class="section-title">Configurações do Sistema</h1>
+    
+    <div class="settings-grid">
+      <!-- Documentação do Sistema -->
+      <div class="setting-card">
+        <div class="setting-header">
+          <div class="setting-icon"></div>
+          <h3 class="setting-title">Documentação</h3>
+        </div>
+        <p class="setting-description">Acesse a documentação completa do sistema para entender todas as funcionalidades disponíveis.</p>
+        
+        <div class="version-info">
+          <div class="version-item">
+            <span class="version-label">Manual do Usuário:</span>
+            <span class="version-value">Disponível</span>
+          </div>
+          <div class="version-item">
+            <span class="version-label">Guia de Instalação:</span>
+            <span class="version-value">Incluído</span>
+          </div>
+          <div class="version-item">
+            <span class="version-label">FAQ:</span>
+            <span class="version-value">Atualizado</span>
+          </div>
+        </div>
+
+        <button class="btn btn-info" onclick="baixarDocumentacao()" style="margin-top: 1.5rem;">
+           Baixar Documentação
+        </button>
+      </div>
+
+      <!-- Status do Sistema -->
+      <div class="setting-card">
+        <div class="setting-header">
+          <div class="setting-icon"></div>
+          <h3 class="setting-title">Status do Sistema</h3>
+        </div>
+        <p class="setting-description">Verifique o status atual do sistema e disponibilidade de atualizações.</p>
+        
+        <div class="system-status">
+          <div class="status-indicator status-online" id="systemStatusIndicator"></div>
+          <span class="status-text" id="systemStatusText">Verificando status...</span>
+        </div>
+
+        <div class="version-info">
+          <div class="version-item">
+            <span class="version-label">Versão Atual:</span>
+            <span class="version-value" id="currentVersion">2.2.0</span>
+          </div>
+          <div class="version-item">
+            <span class="version-label">Última Atualização:</span>
+            <span class="version-value">09/11/2025</span>
+          </div>
+          <div class="version-item">
+            <span class="version-label">Próxima Atualização:</span>
+            <span class="version-value">Maio/2026</span>
+          </div>
+        </div>
+
+        <button class="btn btn-secondary" onclick="verificarAtualizacoes()" style="margin-top: 1.5rem;">
+           Verificar Atualizações
+        </button>
+      </div>
+
+      <!-- Informações do Sistema -->
+      <div class="setting-card">
+        <div class="setting-header">
+          <div class="setting-icon"></div>
+          <h3 class="setting-title">Informações</h3>
+        </div>
+        <p class="setting-description">Informações técnicas e de suporte do sistema Agendamento+.</p>
+        
+        <div class="version-info">
+          <div class="version-item">
+            <span class="version-label">Desenvolvedor:</span>
+            <span class="version-value">Grupo Senac</span>
+          </div>
+          <div class="version-item">
+            <span class="version-label">Contato:</span>
+            <span class="version-value">senacgroup@gmail.com</span>
+          </div>
+          <div class="version-item">
+            <span class="version-label">Licença:</span>
+            <span class="version-value">Senac License</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+    
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container footer-content">
+    <div class="footer-brand">
+      <a href="#" class="logo">Agendamento+</a>
+      <p>Sistema de Agendamento Online</p>
+    </div>
+  <nav class="footer-nav">
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="serviços.html" class="nav-link">Serviços</a>
+      <a href="agendamento.html" class="nav-link">Agendamentos</a>
+      <a href="clientes.html" class="nav-link">Clientes</a>
+      <a href="perfil.html" class="nav-link">Perfil</a>
+    </nav>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/pauloryantomaz/" target="_blank" class="footer-link">Instagram</a>
+      <a href="https://wa.me/5561985825956" target="_blank" class="footer-link">WhatsApp</a>
+    </div>
+  </div>
+  <div class="footer-copy">
+    <p>&copy; 2025 Agendamento+. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<script src="header.js"></script>
+<script>
+// CONFIGURAÇÕES DO SISTEMA
+document.addEventListener('DOMContentLoaded', () => {
+  
+  // =====================
+  // INICIALIZAÇÃO DO TEMA
+  // =====================
+  function inicializarTema() {
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    
+    // Aplicar tema atual
+    document.documentElement.setAttribute('data-theme', currentTheme);
+  }
+
+  // =====================
+  // STATUS DO SISTEMA
+  // =====================
+  function verificarStatusSistema() {
+    const indicator = document.getElementById('systemStatusIndicator');
+    const statusText = document.getElementById('systemStatusText');
+    
+    // Simular verificação de status
+    setTimeout(() => {
+      indicator.className = 'status-indicator status-online';
+      statusText.textContent = 'Sistema Online e Funcionando';
+    }, 1000);
+  }
+
+  // =====================
+  // FUNÇÕES DE CONFIGURAÇÃO
+  // =====================
+  window.baixarDocumentacao = () => {
+    // Criar conteúdo da documentação
+    const documentacao = `
+# Documentação do Sistema Agendamento+
+
+## Versão 2.1.0
+**Data:** 15/01/2025
+
+## 📋 Sumário
+
+1. [Introdução](#introdução)
+2. [Funcionalidades](#funcionalidades)
+3. [Guia de Uso](#guia-de-uso)
+4. [Configurações](#configurações)
+5. [Suporte](#suporte)
+
+## 🎯 Introdução
+
+O **Agendamento+** é um sistema completo para gerenciamento de agendamentos, clientes e serviços. Desenvolvido para oferecer uma experiência intuitiva e eficiente para pequenos e médios negócios.
+
+## ⚡ Funcionalidades
+
+### Principais Módulos:
+- ✅ **Dashboard** - Visão geral do negócio
+- ✅ **Clientes** - Cadastro e gerenciamento
+- ✅ **Serviços** - Catálogo de serviços oferecidos
+- ✅ **Agendamentos** - Sistema completo de agendamentos
+- ✅ **Perfil** - Gerenciamento de usuário
+- ✅ **Configurações** - Personalização do sistema
+
+### Características Técnicas:
+- Design responsivo (Mobile First)
+- Tema claro/escuro
+- Persistência de dados local
+- Interface intuitiva
+- Navegação por teclado
+
+## 🚀 Guia de Uso
+
+### Primeiro Acesso:
+1. Faça login com suas credenciais
+2. Acesse o Dashboard para visão geral
+3. Cadastre seus clientes e serviços
+4. Comece a fazer agendamentos
+
+### Navegação:
+- Use o menu superior para acessar diferentes seções
+- O footer contém links rápidos para todas as páginas
+- Use o botão de tema para alternar entre claro/escuro
+
+## ⚙️ Configurações
+
+### Tema:
+- Clique no botão "Tema Escuro/Claro" no header
+- Ou use a página de configurações para mais opções
+
+### Personalização:
+- Acesse Configurações para ajustes avançados
+- Baixe documentação atualizada
+- Verifique atualizações do sistema
+
+## 📞 Suporte
+
+### Contato:
+- **Email:** senacgroup@gmail.com
+- **Desenvolvedor:** Grupo Senac
+
+### Recursos:
+- [ ] Manual do usuário (este documento)
+- [ ] FAQ integrado
+- [ ] Sistema de ajuda contextual
+
+## 🔄 Atualizações
+
+### Versão 2.1.0 (15/01/2025):
+- ✅ Sistema de agendamentos completo
+- ✅ Gerenciamento de clientes
+- ✅ Catálogo de serviços
+- ✅ Dashboard com estatísticas
+- ✅ Tema claro/escuro
+- ✅ Design responsivo
+
+### Próximas Versões:
+- [ ] Relatórios avançados
+- [ ] Exportação em PDF
+- [ ] Notificações
+- [ ] Backup em nuvem
+
+---
+
+**© 2025 Agendamento+ - Todos os direitos reservados**
+    `;
+
+    // Criar e baixar arquivo
+    const blob = new Blob([documentacao], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'documentacao-agendamento-plus.md';
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    alert('Documentação baixada com sucesso!');
+  };
+
+  window.verificarAtualizacoes = () => {
+    const statusText = document.getElementById('systemStatusText');
+    const currentVersion = document.getElementById('currentVersion');
+    
+    // Simular verificação de atualizações
+    statusText.textContent = 'Verificando atualizações...';
+    
+    setTimeout(() => {
+      statusText.textContent = 'Sistema atualizado!';
+      currentVersion.textContent = '2.2.0';
+      currentVersion.style.color = 'var(--success-color)';
+      alert('Seu sistema está na versão mais recente (v2.2.0)');
+    }, 2000);
+  };
+
+  window.exportarLogs = () => {
+    const logs = `
+=== LOGS DO SISTEMA AGENDAMENTO+ ===
+Data: ${new Date().toLocaleString()}
+Versão: 2.1.0
+Usuário: ${localStorage.getItem('usuario_nome') || 'Não identificado'}
+Tema: ${localStorage.getItem('theme') || 'light'}
+Último Acesso: ${new Date().toLocaleString()}
+
+=== ESTATÍSTICAS ===
+Clientes Cadastrados: ${JSON.parse(localStorage.getItem('clientes') || '[]').length}
+Serviços Cadastrados: ${JSON.parse(localStorage.getItem('servicos') || '[]').length}
+Agendamentos: ${JSON.parse(localStorage.getItem('agendamentos') || '[]').length}
+
+=== CONFIGURAÇÕES ===
+${JSON.stringify(JSON.parse(localStorage.getItem('configuracoes') || '{}'), null, 2)}
+    `;
+
+    const blob = new Blob([logs], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `logs-agendamento-${new Date().toISOString().split('T')[0]}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    alert('Logs exportados com sucesso!');
+  };
+
+  window.limparCache = () => {
+    if (confirm('Tem certeza que deseja limpar o cache do sistema?')) {
+      // Limpar dados temporários (mantendo dados importantes)
+      localStorage.removeItem('cache_temporario');
+      localStorage.removeItem('ultima_sincronizacao');
+      alert('Cache limpo com sucesso!');
+    }
+  };
+
+  // =====================
+  // INICIALIZAÇÃO
+  // =====================
+  
+  // Preloader
+  window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    const minLoadTime = 1500;
+    const loadStart = Date.now();
+    
+    setTimeout(() => {
+      const loadTime = Date.now() - loadStart;
+      const remainingTime = Math.max(3000 - loadTime, 0);
+      
+      setTimeout(() => {
+        preloader.classList.add('hidden');
+        setTimeout(() => preloader.remove(), 300);
+      }, remainingTime);
+    }, minLoadTime);
+  });
+
+  // Inicializar configurações
+  inicializarTema();
+  verificarStatusSistema();
+});
+// NEVE NATALINA - snow.js
+document.addEventListener('DOMContentLoaded', function() {
+  // Criar container da neve
+  const snowContainer = document.createElement('div');
+  snowContainer.className = 'snow-container';
+  snowContainer.id = 'snowContainer';
+  document.body.appendChild(snowContainer);
+
+  // Função para criar flocos de neve
+  function createSnowflake() {
+    const snowflake = document.createElement('div');
+    snowflake.className = 'snowflake';
+    snowflake.innerHTML = '❄';
+    snowflake.style.left = Math.random() * 100 + 'vw';
+    snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+    snowflake.style.opacity = Math.random() * 0.6 + 0.4;
+    snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+    
+    snowContainer.appendChild(snowflake);
+    
+    // Remove o floco após a animação
+    setTimeout(() => {
+      if (snowflake.parentNode) {
+        snowflake.parentNode.removeChild(snowflake);
+      }
+    }, 5000);
+  }
+
+  // Função para congelar elementos aleatórios
+  function freezeRandomElement() {
+    const elements = document.querySelectorAll('.stat-card, .action-btn, .btn, .card, .ag-action-btn, .nav-link, .menu-item, button, a');
+    if (elements.length === 0) return;
+    
+    const randomElement = elements[Math.floor(Math.random() * elements.length)];
+    
+    if (!randomElement.classList.contains('frozen')) {
+      randomElement.classList.add('frozen');
+      
+      // Adiciona efeito de rachadura no gelo
+      const iceCrack = document.createElement('div');
+      iceCrack.className = 'ice-crack';
+      randomElement.appendChild(iceCrack);
+      
+      // Remove o gelo após alguns segundos
+      setTimeout(() => {
+        if (randomElement.classList.contains('frozen')) {
+          randomElement.classList.remove('frozen');
+          if (iceCrack.parentNode) {
+            iceCrack.parentNode.removeChild(iceCrack);
+          }
+        }
+      }, 10000);
+    }
+  }
+
+  // Função para quebrar o gelo
+  function breakIce(element) {
+    const iceCrack = element.querySelector('.ice-crack');
+    if (iceCrack) {
+      iceCrack.classList.add('breaking');
+      setTimeout(() => {
+        element.classList.remove('frozen');
+        if (iceCrack.parentNode) {
+          iceCrack.parentNode.removeChild(iceCrack);
+        }
+      }, 500);
+    }
+  }
+
+  // Event listener para quebrar o gelo ao clicar
+  document.addEventListener('click', function(e) {
+    const frozenElement = e.target.closest('.frozen');
+    if (frozenElement) {
+      breakIce(frozenElement);
+    }
+  });
+
+  // Iniciar neve
+  setInterval(createSnowflake, 100);
+  
+  // Iniciar congelamento
+  setInterval(freezeRandomElement, 5000);
+});
+</script>
+</body>
+</html>
